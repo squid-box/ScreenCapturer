@@ -1,0 +1,16 @@
+ScreenCapturer
+This (Windows) program will run in the background and take a screenshot each time a mouse button is pressed. When the program is closed, or F12 is pressed, these screenshots are saved in a .zip folder.
+
+
+External libraries
+This program uses two external libraries:
+
+* Global mouse and keyboard hooks
+  Application and Global Mouse and Keyboard Hooks .Net Libary in C#
+  http://globalmousekeyhook.codeplex.com
+  Version 3.0.1.9579
+
+* Zip functionality
+  DotNetZip Library
+  http://dotnetzip.codeplex.com/
+  Version 1.9.1.8
