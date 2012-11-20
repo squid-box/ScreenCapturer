@@ -1,15 +1,12 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ScreenCapturer")]
-[assembly: AssemblyDescription("Program to capture screnshots on mouse events.")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyProduct("ScreenCapturer")]
-[assembly: AssemblyCopyright("Copyright © Joel Ahlgren 2012")]
+[assembly: AssemblyTitle("ScreenCapturerTests")]
+[assembly: AssemblyDescription("Unit tests for ScreenCapturer")]
+[assembly: AssemblyProduct("ScreenCapturerTests")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
@@ -17,7 +14,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("628d6b64-163e-471d-8227-5d43386512e1")]
+[assembly: Guid("350ea17f-3ed6-421f-97dc-647a3aa5d7a2")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,8 +26,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.*")]
-[assembly: AssemblyFileVersion("1.1.*")]
-
-// Enable unit tests to access internal objects.
-[assembly: InternalsVisibleTo("ScreenCapturerTests")]
+[assembly: AssemblyVersion("0")]
+[assembly: AssemblyFileVersion("0")]

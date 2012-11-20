@@ -81,7 +81,7 @@
             var i = 1;
             foreach (KeyValuePair<DateTime, Bitmap> shot in this.Shots)
             {
-                string filename = i + "_" + this.DateToFileString(shot.Key) + ".png";
+                string filename = i + "_" + Utility.DateToFileString(shot.Key) + ".png";
                 shot.Value.Save(filename, ImageFormat.Png);
                 filenames.Add(filename);
                 i++;
@@ -141,7 +141,7 @@
             // Always draw a circle at the mouseUp event.
             DrawCircleDot(ref target, mouseUp.Location, pen, Diameter);
 
-            if (ArePointsFarFromEachother(mouseDown.Location, mouseUp.Location))
+            if (Utility.ArePointsFarFromEachother(mouseDown.Location, mouseUp.Location))
             {
                 // Points are distanced from each other, draw both points and a line between them.
                 DrawCircleDot(ref target, mouseDown.Location, pen, Diameter);
@@ -166,34 +166,6 @@
         }
 
         /// <summary>
-        /// Check if two given points are distant to eachother or not.
-        /// </summary>
-        /// <param name="first">First point to check against.</param>
-        /// <param name="second">Second point to check against.</param>
-        /// <returns>True if points are far from each other, false if they are close.</returns>
-        private bool ArePointsFarFromEachother(Point first, Point second)
-        {
-            const decimal threshold = 16;
-
-            bool xFar = false;
-            bool yFar = false;
-
-            // Check x values
-            if (Math.Abs(first.X - second.X) > threshold)
-            {
-                xFar = true;
-            }
-
-            // Check y values
-            if (Math.Abs(first.Y - second.Y) > threshold)
-            {
-                yFar = true;
-            }
-
-            return xFar && yFar;
-        }
-
-        /// <summary>
         /// Takes a screenshot of current screen.
         /// Taken from http://www.switchonthecode.com/tutorials/taking-some-screenshots-with-csharp
         /// </summary>
@@ -210,41 +182,6 @@
             screenShotGraphics.Dispose();
 
             return screenShotBMP;
-        }
-
-        /// <summary>
-        /// Support function, formats DateTime to Windows file system friendly text.
-        /// </summary>
-        /// <param name="dt">DateTime to transform.</param>
-        /// <returns>Windows-friendly text.</returns>
-        private string DateToFileString(DateTime dt)
-        {
-            var date = dt.ToShortDateString();
-
-            var time = string.Empty;
-
-            if (dt.Hour < 10)
-            {
-                time += "0";
-            }
-
-            time += dt.Hour + ".";
-
-            if (dt.Minute < 10)
-            {
-                time += "0";
-            }
-
-            time += dt.Minute + ".";
-
-            if (dt.Second < 10)
-            {
-                time += "0";
-            }
-
-            time += dt.Second;
-            
-            return date + "_" + time;
         }
     }
 }
