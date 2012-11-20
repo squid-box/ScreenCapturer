@@ -47,8 +47,8 @@
         /// <summary>
         /// Takes Shots, keeping the queue correct.
         /// </summary>
-        /// <param name="e">Event data of the mouse event that triggered this shot.</param>
-        internal void TakeShot(MouseEventArgs e)
+        /// <param name="mouseUp">Event data of the mouse event that triggered this shot.</param>
+        internal void TakeShot(MouseEventArgs mouseDown, MouseEventArgs mouseUp)
         {
             if (this.IsTakingShots)
             {
@@ -57,7 +57,7 @@
                     this.Shots.Dequeue();
                 }
 
-                this.Shots.Enqueue(new KeyValuePair<DateTime, Bitmap>(DateTime.Now, this.GrabScreenshot(e)));
+                this.Shots.Enqueue(new KeyValuePair<DateTime, Bitmap>(DateTime.Now, this.GrabScreenshot(mouseDown, mouseUp)));
             }
         }
         
@@ -131,28 +131,81 @@
         /// Draws an icon indicating where mouse click was performed.
         /// </summary>
         /// <param name="target">Graphics object to draw icon on.</param>
-        /// <param name="mouseEvent">Event triggering screenshot, includes X and Y values.</param>
-        private static void DrawMouseClickIcon(ref Graphics target, MouseEventArgs mouseEvent)
+        /// <param name="mouseDown">Event where mouse click was initiated.</param>
+        /// <param name="mouseUp">Event where mouse click was released.</param>
+        private void DrawMouseClickIcon(ref Graphics target, MouseEventArgs mouseDown, MouseEventArgs mouseUp)
         {
             const int Diameter = 16;
-            var pen = new Pen(Color.Red, 2.0f);
-            target.DrawEllipse(pen, mouseEvent.X - (Diameter / 2), mouseEvent.Y - (Diameter / 2), Diameter, Diameter);
-            target.FillRectangle(new SolidBrush(Color.Red), mouseEvent.X, mouseEvent.Y, 1, 1);
+            var pen = new Pen(Color.Red, 1.0f);
+
+            // Always draw a circle at the mouseUp event.
+            DrawCircleDot(ref target, mouseUp.Location, pen, Diameter);
+
+            if (ArePointsFarFromEachother(mouseDown.Location, mouseUp.Location))
+            {
+                // Points are distanced from each other, draw both points and a line between them.
+                DrawCircleDot(ref target, mouseDown.Location, pen, Diameter);
+                target.DrawLine(pen, mouseDown.X, mouseDown.Y, mouseUp.X, mouseUp.Y);
+            }
+        }
+
+        /// <summary>
+        /// Draws a graphical indicator on the specified point.
+        /// </summary>
+        /// <param name="target">Graphics target to draw indicator on.</param>
+        /// <param name="origo">Center point of indicator.</param>
+        /// <param name="pen">Pen to use for drawing indicator.</param>
+        /// <param name="diameter">Diameter of indicator (circle).</param>
+        private void DrawCircleDot(ref Graphics target, Point origo, Pen pen, int diameter)
+        {
+            // Draw a circle centered on the point.
+            target.DrawEllipse(pen, origo.X - (diameter / 2), origo.Y - (diameter / 2), diameter, diameter);
+            
+            // Draw a single pixel indicating the point itself.
+            target.FillRectangle(new SolidBrush(Color.Red), origo.X, origo.Y, 1, 1);
+        }
+
+        /// <summary>
+        /// Check if two given points are distant to eachother or not.
+        /// </summary>
+        /// <param name="first">First point to check against.</param>
+        /// <param name="second">Second point to check against.</param>
+        /// <returns>True if points are far from each other, false if they are close.</returns>
+        private bool ArePointsFarFromEachother(Point first, Point second)
+        {
+            const decimal threshold = 16;
+
+            bool xFar = false;
+            bool yFar = false;
+
+            // Check x values
+            if (Math.Abs(first.X - second.X) > threshold)
+            {
+                xFar = true;
+            }
+
+            // Check y values
+            if (Math.Abs(first.Y - second.Y) > threshold)
+            {
+                yFar = true;
+            }
+
+            return xFar && yFar;
         }
 
         /// <summary>
         /// Takes a screenshot of current screen.
         /// Taken from http://www.switchonthecode.com/tutorials/taking-some-screenshots-with-csharp
         /// </summary>
-        /// <param name="e">Mouse event that triggered this screenshot.</param>
+        /// <param name="mouseUp">Mouse event that triggered this screenshot.</param>
         /// <returns>Screenshot with mouse click marked on it.</returns>
-        private Bitmap GrabScreenshot(MouseEventArgs e)
+        private Bitmap GrabScreenshot(MouseEventArgs mouseDown, MouseEventArgs mouseUp)
         {
             var screenShotBMP = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height, PixelFormat.Format32bppArgb);
             var screenShotGraphics = Graphics.FromImage(screenShotBMP);
 
             screenShotGraphics.CopyFromScreen(Screen.PrimaryScreen.Bounds.X, Screen.PrimaryScreen.Bounds.Y, 0, 0, Screen.PrimaryScreen.Bounds.Size, CopyPixelOperation.SourceCopy);
-            DrawMouseClickIcon(ref screenShotGraphics, e);
+            this.DrawMouseClickIcon(ref screenShotGraphics, mouseDown, mouseUp);
 
             screenShotGraphics.Dispose();
 

@@ -31,6 +31,11 @@
         private readonly Capturer capturer;
 
         /// <summary>
+        /// Latest mouseDown event arguments, used for drawing drag 'n drop lines.
+        /// </summary>
+        private MouseEventArgs lastMouseDownEvent;
+
+        /// <summary>
         /// Indicates whether or not the next shot should be ignored.
         /// </summary>
         private bool ignoreNextShot;
@@ -54,7 +59,8 @@
 
             // Start listening to Mouse- and KeyDown.
             this.listenerKeyboard.KeyDown += this.ListenerKeyboardKeyDown;
-            this.listenerMouse.MouseClick += this.ListenerMouseMouseDown;
+            this.listenerMouse.MouseDown += this.ListenerMouseMouseDown;
+            this.listenerMouse.MouseUp += this.ListenerMouseMouseUp;
         }
 
         /// <summary>
@@ -103,13 +109,26 @@
             {
                 if (this.ignoreNextShot)
                 {
+                    return;
+                }
+
+                this.lastMouseDownEvent = e;
+            }
+        }
+
+        private void ListenerMouseMouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                if (this.ignoreNextShot)
+                {
                     this.ignoreNextShot = false;
                     return;
                 }
 
-                this.capturer.TakeShot(e);
+                this.capturer.TakeShot(e, lastMouseDownEvent);
             }
-        }
+        }
 
         /// <summary>
         /// Captures keypresses are handled here.
