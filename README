@@ -8,9 +8,11 @@ This program uses two external libraries:
 * Global mouse and keyboard hooks
   Application and Global Mouse and Keyboard Hooks .Net Libary in C#
   http://globalmousekeyhook.codeplex.com
+  License: BSD (Information: http://globalmousekeyhook.codeplex.com/license)
   Version 3.0.1.9579
 
 * Zip functionality
   DotNetZip Library
   http://dotnetzip.codeplex.com/
   Version 1.9.1.8
+  License: Ms-PL (Information: http://dotnetzip.codeplex.com/license)
