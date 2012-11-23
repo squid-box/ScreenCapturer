@@ -15,6 +15,7 @@
     public class Capturer
     {
         #region Fields
+
         /// <summary>
         /// Holds screenshots and their timestamp.
         /// </summary>
@@ -47,14 +48,15 @@
         /// <summary>
         /// Takes Shots, keeping the queue correct.
         /// </summary>
-        /// <param name="mouseUp">Event data of the mouse event that triggered this shot.</param>
+        /// <param name="mouseDown">Event data of the mouse event that triggered this shot.</param>
+        /// <param name="mouseUp">Event data of the end of this shot.</param>
         internal void TakeShot(MouseEventArgs mouseDown, MouseEventArgs mouseUp)
         {
             if (this.IsTakingShots)
             {
                 if (this.Shots.Count >= Buffersize)
                 {
-                    this.Shots.Dequeue();
+                    this.Shots.Dequeue().Value.Dispose();
                 }
 
                 this.Shots.Enqueue(new KeyValuePair<DateTime, Bitmap>(DateTime.Now, this.GrabScreenshot(mouseDown, mouseUp)));
@@ -83,6 +85,7 @@
             {
                 string filename = i + "_" + Utility.DateToFileString(shot.Key) + ".png";
                 shot.Value.Save(filename, ImageFormat.Png);
+                shot.Value.Dispose();
                 filenames.Add(filename);
                 i++;
             }
@@ -135,16 +138,16 @@
         /// <param name="mouseUp">Event where mouse click was released.</param>
         private void DrawMouseClickIcon(ref Graphics target, MouseEventArgs mouseDown, MouseEventArgs mouseUp)
         {
-            const int Diameter = 16;
+            const int diameter = 16;
             var pen = new Pen(Color.Red, 1.0f);
 
             // Always draw a circle at the mouseUp event.
-            DrawCircleDot(ref target, mouseUp.Location, pen, Diameter);
+            DrawCircleDot(ref target, mouseUp.Location, pen, diameter);
 
             if (Utility.ArePointsFarFromEachother(mouseDown.Location, mouseUp.Location))
             {
                 // Points are distanced from each other, draw both points and a line between them.
-                DrawCircleDot(ref target, mouseDown.Location, pen, Diameter);
+                DrawCircleDot(ref target, mouseDown.Location, pen, diameter);
                 target.DrawLine(pen, mouseDown.X, mouseDown.Y, mouseUp.X, mouseUp.Y);
             }
         }
@@ -169,7 +172,8 @@
         /// Takes a screenshot of current screen.
         /// Taken from http://www.switchonthecode.com/tutorials/taking-some-screenshots-with-csharp
         /// </summary>
-        /// <param name="mouseUp">Mouse event that triggered this screenshot.</param>
+        /// <param name="mouseDown">Mouse event that triggered this screenshot.</param>
+        /// <param name="mouseUp">Mouse event that ended this screenshot.</param>
         /// <returns>Screenshot with mouse click marked on it.</returns>
         private Bitmap GrabScreenshot(MouseEventArgs mouseDown, MouseEventArgs mouseUp)
         {
