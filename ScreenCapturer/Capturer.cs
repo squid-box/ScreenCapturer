@@ -23,7 +23,7 @@
         /// <summary>
         /// Number of screenshots to save.
         /// </summary>
-        private const int Buffersize = 32;
+        internal const int Buffersize = 32;
 
         #endregion
 
