@@ -1,10 +1,11 @@
-﻿using System.Drawing;
-using System.IO;
-
-namespace ScreenCapturerTests
+﻿namespace ScreenCapturerTests
 {
     using System;
+    using System.Drawing;
+    using System.IO;
+
     using NUnit.Framework;
+
     using ScreenCapturer;
 
     /// <summary>

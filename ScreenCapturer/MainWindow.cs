@@ -1,6 +1,7 @@
 ﻿namespace ScreenCapturer
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Drawing;
     using System.Windows.Forms;
@@ -40,6 +41,8 @@
         /// </summary>
         private bool ignoreNextShot;
 
+        private HashSet<MouseButtons> activeMouseButtons;
+
         #endregion
 
         /// <summary>
@@ -50,6 +53,7 @@
             this.InitializeComponent();
 
             this.capturer = new Capturer();
+            this.activeMouseButtons = ReadActiveMouseButtons();
             
             this.listenerKeyboard = new KeyboardHookListener(new GlobalHooker());
             this.listenerMouse = new MouseHookListener(new GlobalHooker());
@@ -98,6 +102,11 @@
 
         #region Event handling
 
+        private bool IsMouseButtonActive(MouseButtons button)
+        {
+            return activeMouseButtons.Contains(button);
+        }
+
         /// <summary>
         /// Captures mousepresses handled here.
         /// </summary>
@@ -105,7 +114,7 @@
         /// <param name="e">Event information.</param>
         private void ListenerMouseMouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (IsMouseButtonActive(e.Button))
             {
                 if (this.ignoreNextShot)
                 {
@@ -118,7 +127,7 @@
 
         private void ListenerMouseMouseUp(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (IsMouseButtonActive(e.Button))
             {
                 if (this.ignoreNextShot)
                 {
@@ -255,7 +264,7 @@
             this.capturer.IsTakingShots = false;
             this.notificationIcon.ShowBalloonTip(250, "ScreenCapturer", string.Format("Saving {0} shots to file...", this.capturer.Shots.Count), ToolTipIcon.Info);
             
-            var path = this.capturer.SaveShots("logs");
+            var path = this.capturer.SaveShots();
 
             if (path != null)
             {
@@ -267,5 +276,25 @@
                 this.notificationIcon.ShowBalloonTip(250, "ScreenCapturer", "No shots to save...", ToolTipIcon.Warning);
             }
         }
+
+        #region Utility
+
+        private HashSet<MouseButtons> ReadActiveMouseButtons()
+        {
+            var result = new HashSet<MouseButtons>();
+
+            foreach (var s in Properties.Settings.Default.MouseKeyTriggers)
+            {
+                MouseButtons button;
+
+                MouseButtons.TryParse(s, true, out button);
+
+                result.Add(button);
+            }
+
+            return result;
+        }
+
+        #endregion
     }
 }

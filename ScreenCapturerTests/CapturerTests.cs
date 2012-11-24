@@ -1,9 +1,5 @@
 ﻿namespace ScreenCapturerTests
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using System.Windows.Forms;
 
     using NUnit.Framework;
@@ -66,17 +62,17 @@
             capturer.IsTakingShots = true;
 
             // Fill the Shots to the "buffer limit"
-            for (var i = 0; i < Capturer.Buffersize+1; i++)
+            for (var i = 0; i < capturer.Buffersize+1; i++)
             {
                 capturer.TakeShot(mouseLeftDown1, mouseLeftUp1);
             }
 
             // Assert that limit is reached.
-            Assert.AreEqual(Capturer.Buffersize, capturer.Shots.Count);
+            Assert.AreEqual(capturer.Buffersize, capturer.Shots.Count);
 
             // Assert that limit is not breached.
             capturer.TakeShot(mouseLeftDown1, mouseLeftUp1);
-            Assert.AreEqual(Capturer.Buffersize, capturer.Shots.Count);
+            Assert.AreEqual(capturer.Buffersize, capturer.Shots.Count);
         }
 
         [Test]
@@ -108,8 +104,8 @@
             capturer.TakeShot(mouseLeftDown1, mouseLeftUp1);
 
             // Save shot to file, then remove the zip immediately.
-            capturer.SaveShots("tmp");
-            System.IO.Directory.Delete("tmp", true);
+            capturer.SaveShots();
+            System.IO.Directory.Delete(ScreenCapturer.Properties.Settings.Default.SaveFolder, true);
 
             Assert.AreEqual(0, capturer.Shots.Count);
         }

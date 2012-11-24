@@ -24,7 +24,7 @@
         /// <summary>
         /// Number of screenshots to save.
         /// </summary>
-        internal const int Buffersize = 32;
+        internal int Buffersize = Properties.Settings.Default.BufferSize;
 
         #endregion
 
@@ -66,10 +66,12 @@
         /// <summary>
         /// Saves screenshots currently in buffer to a .zip-file named with todays date.
         /// </summary>
-        /// <param name="path">Path (absolute or relative) where .zip will be placed.</param>
         /// <returns>Path to saved file.</returns>
-        internal string SaveShots(string path)
+        internal string SaveShots()
         {
+            // Load settings
+            var path = Properties.Settings.Default.SaveFolder;
+
             // Pause screenshotting
             this.IsTakingShots = false;
 
