@@ -32,8 +32,8 @@ Global
 		{3295D33E-A88C-48A1-A486-74E1EB25E201}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{3295D33E-A88C-48A1-A486-74E1EB25E201}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3295D33E-A88C-48A1-A486-74E1EB25E201}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3295D33E-A88C-48A1-A486-74E1EB25E201}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{3295D33E-A88C-48A1-A486-74E1EB25E201}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3295D33E-A88C-48A1-A486-74E1EB25E201}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{3295D33E-A88C-48A1-A486-74E1EB25E201}.Release|Mixed Platforms.Build.0 = Release|x86
 		{3295D33E-A88C-48A1-A486-74E1EB25E201}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
