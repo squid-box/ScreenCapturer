@@ -1,10 +1,10 @@
-﻿namespace ScreenCapturerTests
+﻿namespace ScreenCapturerTests.UnitTests
 {
     using System.Windows.Forms;
 
     using NUnit.Framework;
 
-    using ScreenCapturer;
+    using ScreenCapturer.Code;
 
     [TestFixture]
     class CapturerTests

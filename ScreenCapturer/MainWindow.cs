@@ -9,6 +9,8 @@
     using MouseKeyboardActivityMonitor;
     using MouseKeyboardActivityMonitor.WinApi;
 
+    using Code;
+
     /// <summary>
     /// The main window of this program.
     /// </summary>

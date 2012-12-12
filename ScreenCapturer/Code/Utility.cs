@@ -1,4 +1,4 @@
-﻿namespace ScreenCapturer
+﻿namespace ScreenCapturer.Code
 {
     using System;
     using System.Drawing;

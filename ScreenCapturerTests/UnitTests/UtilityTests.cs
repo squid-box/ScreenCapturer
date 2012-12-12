@@ -1,4 +1,4 @@
-﻿namespace ScreenCapturerTests
+﻿namespace ScreenCapturerTests.UnitTests
 {
     using System;
     using System.Drawing;
@@ -6,7 +6,7 @@
 
     using NUnit.Framework;
 
-    using ScreenCapturer;
+    using ScreenCapturer.Code;
 
     /// <summary>
     /// Tests the class ScreenCapturer.Utility
@@ -93,7 +93,7 @@
 
         #endregion
 
-        #region 
+        #region DateFileToString
 
         [Test]
         public void DateFileToString_ReturnsValidPathTest()
