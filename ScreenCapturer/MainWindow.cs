@@ -1,7 +1,8 @@
-﻿namespace ScreenCapturer
+﻿using ScreenCapturer.Properties;
+
+namespace ScreenCapturer
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel;
     using System.Drawing;
     using System.Windows.Forms;
@@ -44,21 +45,6 @@
         private bool _ignoreNextShot;
 
         /// <summary>
-        /// Keys that will trigger a screenshot being taken.
-        /// </summary>
-        private readonly HashSet<MouseButtons> _activeMouseButtons;
-
-        /// <summary>
-        /// Key that toggles whether or not the program takes screenshots or not.
-        /// </summary>
-        private readonly Keys _toggleKey;
-
-        /// <summary>
-        /// Key that triggers a save action.
-        /// </summary>
-        private readonly Keys _saveKey;
-
-        /// <summary>
         /// System time when last shot was taken, used to detect double clicks.
         /// </summary>
         private long _lastShotTaken;
@@ -79,9 +65,6 @@
             Visible = false;
 
             _capturer = new Capturer();
-            _activeMouseButtons = ReadActiveMouseButtons();
-            _toggleKey = ReadToggleKey();
-            _saveKey = ReadSaveKey();
 
             _lastShotTaken = 0;
             
@@ -132,13 +115,18 @@
 
         #region Event handling
 
+        /// <summary>
+        /// Determines if the mouse button should trigger a screenshot.
+        /// </summary>
+        /// <param name="button"></param>
+        /// <returns></returns>
         private bool IsMouseButtonActive(MouseButtons button)
         {
-            return _activeMouseButtons.Contains(button);
+            return Settings.Default.MouseKeyTriggers.Contains(button.ToString());
         }
 
         /// <summary>
-        /// Captures mousepresses handled here.
+        /// First part of the capturing process, saves this MouseEvent for <see cref="ListenerMouseMouseUp"/>.
         /// </summary>
         /// <param name="sender">Event sender.</param>
         /// <param name="e">Event information.</param>
@@ -155,6 +143,11 @@
             }
         }
 
+        /// <summary>
+        /// Actually performs the capturing actions.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ListenerMouseMouseUp(object sender, MouseEventArgs e)
         {
             if (IsMouseButtonActive(e.Button))
@@ -182,18 +175,18 @@
         }
 
         /// <summary>
-        /// Captures keypresses are handled here.
+        /// Captured keypresses are handled here.
         /// </summary>
         /// <param name="sender">Event sender.</param>
         /// <param name="e">Event information.</param>
         private void ListenerKeyboardKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == _toggleKey)
+            if (e.KeyCode.ToString() == Settings.Default.ToggleCaptureKey)
             {
                 ToggleIsTakingScreenShots();
             }
             
-            if (e.KeyCode == _saveKey)
+            if (e.KeyCode.ToString() == Settings.Default.SaveKey)
             {
                 SaveShots();
             }
@@ -318,56 +311,6 @@
                 notificationIcon.ShowBalloonTip(250, "ScreenCapturer", "No shots to save...", ToolTipIcon.Warning);
             }
         }
-
-        #region Utility
-
-        /// <summary>
-        /// Read which mouse buttons toggle a screenshot from the Settings file.
-        /// </summary>
-        /// <returns>Set of keys to listen for.</returns>
-        private HashSet<MouseButtons> ReadActiveMouseButtons()
-        {
-            var result = new HashSet<MouseButtons>();
-
-            foreach (var s in Properties.Settings.Default.MouseKeyTriggers)
-            {
-                MouseButtons button;
-
-                Enum.TryParse(s, true, out button);
-
-                result.Add(button);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Read which key toggles the screenshot mode from the Settings file.
-        /// </summary>
-        /// <returns>Key to listen for.</returns>
-        private Keys ReadToggleKey()
-        {
-            Keys toggleKey;
-
-            Enum.TryParse(Properties.Settings.Default.ToggleCaptureKey, true, out toggleKey);
-
-            return toggleKey;
-        }
-
-        /// <summary>
-        /// Read which key toggles a save from the Settings file.
-        /// </summary>
-        /// <returns>Key to listen for.</returns>
-        private Keys ReadSaveKey()
-        {
-            Keys toggleKey;
-
-            Enum.TryParse(Properties.Settings.Default.SaveKey, true, out toggleKey);
-
-            return toggleKey;
-        }
-
-        #endregion
 
         private void SettingsToolStripMenuItemClick(object sender, EventArgs e)
         {
