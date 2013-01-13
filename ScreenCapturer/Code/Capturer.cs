@@ -1,4 +1,6 @@
-﻿namespace ScreenCapturer.Code
+﻿using ScreenCapturer.Properties;
+
+namespace ScreenCapturer.Code
 {
     using System;
     using System.Collections.Generic;
@@ -12,17 +14,17 @@
     /// </summary>
     public class Capturer
     {
-        #region Fields
+        #region Fields & Properties
 
         /// <summary>
         /// Holds screenshots and their timestamp.
         /// </summary>
-        internal readonly List<Screenshot>  Shots;
+        internal readonly List<Screenshot> Shots;
 
-        /// <summary>
-        /// Number of screenshots to save.
-        /// </summary>
-        internal int Buffersize;
+        public int Buffersize 
+        {
+            get { return Settings.Default.BufferSize; }
+        }
 
         #endregion
 
@@ -31,8 +33,7 @@
         /// </summary>
         internal Capturer()
         {
-            Buffersize = Properties.Settings.Default.BufferSize;
-            Shots = new List<Screenshot>(Buffersize);
+            Shots = new List<Screenshot>();
         }
 
         #region Properties
@@ -62,7 +63,7 @@
 
                 CheckBuffer();
 
-                Shots.Insert(0, Screenshot.Capture(mouseDown, mouseUp, doubleClick));
+                Shots.Add(Screenshot.Capture(mouseDown, mouseUp, doubleClick));
             }
         }
 
@@ -71,7 +72,7 @@
         /// </summary>
         private void CheckBuffer()
         {
-            if (Shots.Count >= Buffersize)
+            if (Shots.Count >= Settings.Default.BufferSize)
             {
                 Shots.RemoveAt(Shots.Count-1);
             }
@@ -84,7 +85,7 @@
         internal string SaveShots()
         {
             // Load settings
-            var path = Properties.Settings.Default.SaveFolder;
+            var path = Settings.Default.SaveFolder;
 
             // Pause screenshotting
             IsTakingShots = false;
