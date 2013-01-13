@@ -22,7 +22,7 @@
 
         #region Constructors
 
-        private Screenshot(MouseEventArgs mouseDown, MouseEventArgs mouseUp)
+        private Screenshot(MouseEventArgs mouseDown, MouseEventArgs mouseUp, bool doubleClick)
         {
             _image = CaptureScreen();
             _timeCaptured = DateTime.Now;
@@ -30,7 +30,14 @@
             _mouseDown = mouseDown;
             _mouseUp = mouseUp;
 
-            MousePlotter.DrawMouseClickIcon(ref _image, mouseDown, mouseUp);
+            if (doubleClick)
+            {
+                MousePlotter.DrawMouseDoubleClickIcon(ref _image, mouseDown, mouseUp);
+            }
+            else
+            {
+                MousePlotter.DrawMouseClickIcon(ref _image, mouseDown, mouseUp);
+            }
         }
 
         #endregion
@@ -94,9 +101,9 @@
         /// Take a screenshot.
         /// </summary>
         /// <returns>Screenshot of current desktop.</returns>
-        public static Screenshot Capture(MouseEventArgs mouseDown, MouseEventArgs mouseUp)
+        public static Screenshot Capture(MouseEventArgs mouseDown, MouseEventArgs mouseUp, bool doubleClick)
         {
-            return new Screenshot(mouseDown, mouseUp);
+            return new Screenshot(mouseDown, mouseUp, doubleClick);
         }
     }
 }

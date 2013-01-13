@@ -31,6 +31,21 @@
             }
 
             graph.Dispose();
+            pen.Dispose();
+        }
+
+        public static void DrawMouseDoubleClickIcon(ref Bitmap target, MouseEventArgs mouseDown, MouseEventArgs mouseUp)
+        {
+            var graph = Graphics.FromImage(target);
+            const int diameter = 16;
+            var pen = new Pen(Color.Red, 1.0f);
+
+            // Always draw a circle at the mouseUp event.
+            DrawCircleDot(ref graph, mouseUp.Location, pen, diameter);
+            DrawCircleDot(ref graph, mouseUp.Location, pen, diameter*2);
+
+            graph.Dispose();
+            pen.Dispose();
         }
 
         /// <summary>
@@ -47,6 +62,6 @@
 
             // Draw a single pixel indicating the point itself.
             target.FillRectangle(new SolidBrush(Color.Red), origo.X, origo.Y, 1, 1);
-        } 
+        }
     }
 }

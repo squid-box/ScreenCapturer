@@ -17,12 +17,12 @@
         /// <summary>
         /// Holds screenshots and their timestamp.
         /// </summary>
-        internal readonly Queue<Screenshot> Shots;
+        internal readonly List<Screenshot>  Shots;
 
         /// <summary>
         /// Number of screenshots to save.
         /// </summary>
-        internal int Buffersize = Properties.Settings.Default.BufferSize;
+        internal int Buffersize;
 
         #endregion
 
@@ -31,7 +31,8 @@
         /// </summary>
         internal Capturer()
         {
-            Shots = new Queue<Screenshot>(Buffersize);
+            Buffersize = Properties.Settings.Default.BufferSize;
+            Shots = new List<Screenshot>(Buffersize);
         }
 
         #region Properties
@@ -48,19 +49,34 @@
         /// </summary>
         /// <param name="mouseDown">Event data of the mouse event that triggered this shot.</param>
         /// <param name="mouseUp">Event data of the end of this shot.</param>
-        internal void TakeShot(MouseEventArgs mouseDown, MouseEventArgs mouseUp)
+        /// <param name="doubleClick">Is this a screenshot of a double click?</param>
+        internal void TakeShot(MouseEventArgs mouseDown, MouseEventArgs mouseUp, Boolean doubleClick)
         {
             if (IsTakingShots)
             {
-                if (Shots.Count >= Buffersize)
+                if (doubleClick && Shots.Count > 0)
                 {
-                    Shots.Dequeue().Dispose();
+                    // If a doubleclick is detected, last shot is removed to "make room" for the double click shot.
+                    Shots.RemoveAt(0);
                 }
 
-                Shots.Enqueue(Screenshot.Capture(mouseDown, mouseUp));
+                CheckBuffer();
+
+                Shots.Insert(0, Screenshot.Capture(mouseDown, mouseUp, doubleClick));
             }
         }
-        
+
+        /// <summary>
+        /// Checks if the buffer is full, and removes the oldest shot if it is.
+        /// </summary>
+        private void CheckBuffer()
+        {
+            if (Shots.Count >= Buffersize)
+            {
+                Shots.RemoveAt(Shots.Count-1);
+            }
+        }
+
         /// <summary>
         /// Saves screenshots currently in buffer to a .zip-file named with todays date.
         /// </summary>

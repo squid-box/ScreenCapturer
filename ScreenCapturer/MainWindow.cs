@@ -58,6 +58,16 @@
         /// </summary>
         private readonly Keys _saveKey;
 
+        /// <summary>
+        /// System time when last shot was taken, used to detect double clicks.
+        /// </summary>
+        private long _lastShotTaken;
+        
+        /// <summary>
+        /// Defines the maximum amount of milliseconds there can be between two clicks to define the two clicks as a doubleclick.
+        /// </summary>
+        private const long DoubleclickThreshold = 500;
+
         #endregion
 
         /// <summary>
@@ -72,6 +82,8 @@
             _activeMouseButtons = ReadActiveMouseButtons();
             _toggleKey = ReadToggleKey();
             _saveKey = ReadSaveKey();
+
+            _lastShotTaken = 0;
             
             _listenerKeyboard = new KeyboardHookListener(new GlobalHooker());
             _listenerMouse = new MouseHookListener(new GlobalHooker());
@@ -153,8 +165,20 @@
                     return;
                 }
 
-                _capturer.TakeShot(e, _lastMouseDownEvent);
+                _capturer.TakeShot(e, _lastMouseDownEvent, DoubleClickDetected());
+                _lastShotTaken = Environment.TickCount;
             }
+        }
+
+        /// <summary>
+        /// Checks if a click is close enough to the previous one to define a double click.
+        /// </summary>
+        /// <returns>True if double click, false if not.</returns>
+        private bool DoubleClickDetected()
+        {
+            var now = Environment.TickCount;
+
+            return (now - _lastShotTaken) < DoubleclickThreshold;
         }
 
         /// <summary>

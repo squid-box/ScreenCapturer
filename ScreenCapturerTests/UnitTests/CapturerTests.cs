@@ -42,14 +42,14 @@
             capturer.IsTakingShots = true;
 
             // Take shot and check
-            capturer.TakeShot(mouseLeftDown1, mouseLeftUp1);
+            capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
             Assert.AreEqual(1, capturer.Shots.Count);
 
-            capturer.TakeShot(mouseLeftDown1, mouseLeftUp1);
-            capturer.TakeShot(mouseLeftDown1, mouseLeftUp1);
+            capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
+            capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
             Assert.AreEqual(3, capturer.Shots.Count);
 
-            capturer.TakeShot(mouseDragDown,mouseDragUp);
+            capturer.TakeShot(mouseDragDown, mouseDragUp, false);
             Assert.AreEqual(4, capturer.Shots.Count);
         }
 
@@ -64,14 +64,14 @@
             // Fill the Shots to the "buffer limit"
             for (var i = 0; i < capturer.Buffersize+1; i++)
             {
-                capturer.TakeShot(mouseLeftDown1, mouseLeftUp1);
+                capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
             }
 
             // Assert that limit is reached.
             Assert.AreEqual(capturer.Buffersize, capturer.Shots.Count);
 
             // Assert that limit is not breached.
-            capturer.TakeShot(mouseLeftDown1, mouseLeftUp1);
+            capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
             Assert.AreEqual(capturer.Buffersize, capturer.Shots.Count);
         }
 
@@ -81,16 +81,16 @@
             // No shots in capturer at start.
             Assert.AreEqual(0, capturer.Shots.Count);
 
-            capturer.TakeShot(mouseLeftDown1, mouseLeftUp1);
+            capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
             Assert.AreEqual(0, capturer.Shots.Count);
 
             capturer.IsTakingShots = true;
 
-            capturer.TakeShot(mouseLeftDown1, mouseLeftUp1);
+            capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
             Assert.AreEqual(1, capturer.Shots.Count);
 
             capturer.IsTakingShots = false;
-            capturer.TakeShot(mouseLeftDown1, mouseLeftUp1);
+            capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
             Assert.AreEqual(1, capturer.Shots.Count);
         }
 
@@ -101,7 +101,7 @@
             Assert.AreEqual(0, capturer.Shots.Count);
 
             capturer.IsTakingShots = true;
-            capturer.TakeShot(mouseLeftDown1, mouseLeftUp1);
+            capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
 
             // Save shot to file, then remove the zip immediately.
             capturer.SaveShots();
