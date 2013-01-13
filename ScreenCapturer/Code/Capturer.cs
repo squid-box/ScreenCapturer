@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Drawing;
     using System.IO;
     using System.Windows.Forms;
     
@@ -32,7 +31,7 @@
         /// </summary>
         internal Capturer()
         {
-            this.Shots = new Queue<Screenshot>(Buffersize);
+            Shots = new Queue<Screenshot>(Buffersize);
         }
 
         #region Properties
@@ -51,14 +50,14 @@
         /// <param name="mouseUp">Event data of the end of this shot.</param>
         internal void TakeShot(MouseEventArgs mouseDown, MouseEventArgs mouseUp)
         {
-            if (this.IsTakingShots)
+            if (IsTakingShots)
             {
-                if (this.Shots.Count >= Buffersize)
+                if (Shots.Count >= Buffersize)
                 {
-                    this.Shots.Dequeue().Dispose();
+                    Shots.Dequeue().Dispose();
                 }
 
-                this.Shots.Enqueue(Screenshot.Capture(mouseDown, mouseUp));
+                Shots.Enqueue(Screenshot.Capture(mouseDown, mouseUp));
             }
         }
         
@@ -72,9 +71,9 @@
             var path = Properties.Settings.Default.SaveFolder;
 
             // Pause screenshotting
-            this.IsTakingShots = false;
+            IsTakingShots = false;
 
-            if (this.Shots.Count == 0)
+            if (Shots.Count == 0)
             {
                 return null;
             }
@@ -82,7 +81,7 @@
             var filenames = new List<string>();
 
             var i = 1;
-            foreach (var shot in this.Shots)
+            foreach (var shot in Shots)
             {
                 var filename = shot.SaveToFile(i);
                 filenames.Add(filename);
@@ -91,7 +90,7 @@
                 shot.Dispose();
             }
 
-            this.Shots.Clear();
+            Shots.Clear();
 
             var numberOfSaves = 1;
             var savePath = string.Format("{0}\\screenshots_{1}_{2}.zip", path, DateTime.Today.ToShortDateString(), numberOfSaves);
@@ -123,10 +122,10 @@
             }
 
             // Resume screenshotting
-            this.IsTakingShots = true;
+            IsTakingShots = true;
 
             // Clear buffer
-            this.Shots.Clear();
+            Shots.Clear();
 
             return savePath;
         }

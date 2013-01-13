@@ -49,20 +49,39 @@ namespace ScreenCapturer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
-<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <string>Left</string>
-  <string>Middle</string>
-  <string>Right</string>
-  <string>XButton1</string>
-  <string>XButton2</string>
-</ArrayOfString>")]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>Left</string>\r\n  <string>Right</string>\r\n</ArrayOfString>")]
         public global::System.Collections.Specialized.StringCollection MouseKeyTriggers {
             get {
                 return ((global::System.Collections.Specialized.StringCollection)(this["MouseKeyTriggers"]));
             }
             set {
                 this["MouseKeyTriggers"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("F12")]
+        public string ToggleCaptureKey {
+            get {
+                return ((string)(this["ToggleCaptureKey"]));
+            }
+            set {
+                this["ToggleCaptureKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("F11")]
+        public string SaveKey {
+            get {
+                return ((string)(this["SaveKey"]));
+            }
+            set {
+                this["SaveKey"] = value;
             }
         }
     }

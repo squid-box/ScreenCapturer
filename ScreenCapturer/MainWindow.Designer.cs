@@ -36,6 +36,8 @@
             this.notificationMenuSave = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.notificationMenuExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.notificationContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,10 +56,12 @@
             this.notificationContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.notificationMenuToggle,
             this.notificationMenuSave,
+            this.toolStripSeparator2,
+            this.settingsToolStripMenuItem,
             this.toolStripSeparator1,
             this.notificationMenuExit});
             this.notificationContextMenu.Name = "notificationContextMenu";
-            this.notificationContextMenu.Size = new System.Drawing.Size(163, 76);
+            this.notificationContextMenu.Size = new System.Drawing.Size(163, 126);
             // 
             // notificationMenuToggle
             // 
@@ -85,6 +89,18 @@
             this.notificationMenuExit.Size = new System.Drawing.Size(162, 22);
             this.notificationMenuExit.Text = "Exit";
             this.notificationMenuExit.Click += new System.EventHandler(this.NotificationMenuExitClick);
+            // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItemClick);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(159, 6);
             // 
             // MainWindow
             // 
@@ -114,6 +130,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 
         #endregion
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
     }
 }
 

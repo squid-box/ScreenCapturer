@@ -12,11 +12,14 @@
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
   &lt;string&gt;Left&lt;/string&gt;
-  &lt;string&gt;Middle&lt;/string&gt;
   &lt;string&gt;Right&lt;/string&gt;
-  &lt;string&gt;XButton1&lt;/string&gt;
-  &lt;string&gt;XButton2&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
+    </Setting>
+    <Setting Name="ToggleCaptureKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">F12</Value>
+    </Setting>
+    <Setting Name="SaveKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">F11</Value>
     </Setting>
   </Settings>
 </SettingsFile>

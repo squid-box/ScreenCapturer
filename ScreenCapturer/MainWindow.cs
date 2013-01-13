@@ -21,29 +21,42 @@
         /// <summary>
         /// Listens for global mouse events.
         /// </summary>
-        private readonly MouseHookListener listenerMouse;
+        private readonly MouseHookListener _listenerMouse;
 
         /// <summary>
         /// Listens for global keyboard events.
         /// </summary>
-        private readonly KeyboardHookListener listenerKeyboard;
+        private readonly KeyboardHookListener _listenerKeyboard;
 
         /// <summary>
         /// Performs all screencapturing actions.
         /// </summary>
-        private readonly Capturer capturer;
+        private readonly Capturer _capturer;
 
         /// <summary>
         /// Latest mouseDown event arguments, used for drawing drag 'n drop lines.
         /// </summary>
-        private MouseEventArgs lastMouseDownEvent;
+        private MouseEventArgs _lastMouseDownEvent;
 
         /// <summary>
         /// Indicates whether or not the next shot should be ignored.
         /// </summary>
-        private bool ignoreNextShot;
+        private bool _ignoreNextShot;
 
-        private HashSet<MouseButtons> activeMouseButtons;
+        /// <summary>
+        /// Keys that will trigger a screenshot being taken.
+        /// </summary>
+        private readonly HashSet<MouseButtons> _activeMouseButtons;
+
+        /// <summary>
+        /// Key that toggles whether or not the program takes screenshots or not.
+        /// </summary>
+        private readonly Keys _toggleKey;
+
+        /// <summary>
+        /// Key that triggers a save action.
+        /// </summary>
+        private readonly Keys _saveKey;
 
         #endregion
 
@@ -52,21 +65,24 @@
         /// </summary>
         public MainWindow()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+            Visible = false;
 
-            this.capturer = new Capturer();
-            this.activeMouseButtons = ReadActiveMouseButtons();
+            _capturer = new Capturer();
+            _activeMouseButtons = ReadActiveMouseButtons();
+            _toggleKey = ReadToggleKey();
+            _saveKey = ReadSaveKey();
             
-            this.listenerKeyboard = new KeyboardHookListener(new GlobalHooker());
-            this.listenerMouse = new MouseHookListener(new GlobalHooker());
+            _listenerKeyboard = new KeyboardHookListener(new GlobalHooker());
+            _listenerMouse = new MouseHookListener(new GlobalHooker());
 
-            this.listenerKeyboard.Enabled = true;
-            this.listenerMouse.Enabled = true;
+            _listenerKeyboard.Enabled = true;
+            _listenerMouse.Enabled = true;
 
             // Start listening to Mouse- and KeyDown.
-            this.listenerKeyboard.KeyDown += this.ListenerKeyboardKeyDown;
-            this.listenerMouse.MouseDown += this.ListenerMouseMouseDown;
-            this.listenerMouse.MouseUp += this.ListenerMouseMouseUp;
+            _listenerKeyboard.KeyDown += ListenerKeyboardKeyDown;
+            _listenerMouse.MouseDown += ListenerMouseMouseDown;
+            _listenerMouse.MouseUp += ListenerMouseMouseUp;
         }
 
         /// <summary>
@@ -79,8 +95,8 @@
             // Hopefully removes all hooks.
             try
             {
-                this.listenerKeyboard.Dispose();
-                this.listenerMouse.Dispose();
+                _listenerKeyboard.Dispose();
+                _listenerMouse.Dispose();
             }
             catch (Win32Exception)
             {
@@ -88,25 +104,25 @@
                 // See http://globalmousekeyhook.codeplex.com/workitem/929
             }
 
-            if (this.capturer.Shots.Count != 0)
+            if (_capturer.Shots.Count != 0)
             {
                 // There are still screenshots in the buffer! D:
-                DialogResult res = MessageBox.Show(this, "There are unsaved screenshots, do you want to save them?", "Unsaved data!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                var res = MessageBox.Show(this, "There are unsaved screenshots, do you want to save them?", "Unsaved data!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 
                 if (res == DialogResult.Yes)
                 {
-                    this.SaveShots();
+                    SaveShots();
                 }
             }
 
-            this.notificationIcon.Visible = false;
+            notificationIcon.Visible = false;
         }
 
         #region Event handling
 
         private bool IsMouseButtonActive(MouseButtons button)
         {
-            return activeMouseButtons.Contains(button);
+            return _activeMouseButtons.Contains(button);
         }
 
         /// <summary>
@@ -118,12 +134,12 @@
         {
             if (IsMouseButtonActive(e.Button))
             {
-                if (this.ignoreNextShot)
+                if (_ignoreNextShot)
                 {
                     return;
                 }
 
-                this.lastMouseDownEvent = e;
+                _lastMouseDownEvent = e;
             }
         }
 
@@ -131,13 +147,13 @@
         {
             if (IsMouseButtonActive(e.Button))
             {
-                if (this.ignoreNextShot)
+                if (_ignoreNextShot)
                 {
-                    this.ignoreNextShot = false;
+                    _ignoreNextShot = false;
                     return;
                 }
 
-                this.capturer.TakeShot(e, lastMouseDownEvent);
+                _capturer.TakeShot(e, _lastMouseDownEvent);
             }
         }
 
@@ -148,14 +164,14 @@
         /// <param name="e">Event information.</param>
         private void ListenerKeyboardKeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode)
+            if (e.KeyCode == _toggleKey)
             {
-                case Keys.F12:
-                    this.ToggleIsTakingScreenShots();
-                    break;
-                case Keys.F11:
-                    this.SaveShots();
-                    break;
+                ToggleIsTakingScreenShots();
+            }
+            
+            if (e.KeyCode == _saveKey)
+            {
+                SaveShots();
             }
         }
 
@@ -168,7 +184,7 @@
         /// <param name="e">Event data.</param>
         private void NotificationMenuExitClick(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         /// <summary>
@@ -178,7 +194,7 @@
         /// <param name="e">Event data.</param>
         private void NotificationMenuToggleClick(object sender, EventArgs e)
         {
-            this.ToggleIsTakingScreenShots();
+            ToggleIsTakingScreenShots();
         }
 
         /// <summary>
@@ -188,7 +204,7 @@
         /// <param name="e">Event data.</param>
         private void NotificationMenuSaveClick(object sender, EventArgs e)
         {
-            this.SaveShots();
+            SaveShots();
         }
 
         /// <summary>
@@ -198,7 +214,7 @@
         /// <param name="e">Event data.</param>
         private void MainWindowLoad(object sender, EventArgs e)
         {
-            this.Size = new Size(0, 0);
+            Size = new Size(0, 0);
         }
 
         /// <summary>
@@ -210,7 +226,7 @@
         {
             if (e.Button == MouseButtons.Right)
             {
-                this.ignoreNextShot = true;
+                _ignoreNextShot = true;
             }
         }
 
@@ -228,17 +244,17 @@
         {
             if (enable)
             {
-                this.listenerMouse.Enabled = true;
-                this.capturer.IsTakingShots = true;
-                this.notificationIcon.ShowBalloonTip(250, "ScreenCapturer", "SC has started taking screenshots...", ToolTipIcon.Info);
-                this.notificationIcon.Text = "ScreenCapturer is taking screenshots.";
+                _listenerMouse.Enabled = true;
+                _capturer.IsTakingShots = true;
+                notificationIcon.ShowBalloonTip(250, "ScreenCapturer", "SC has started taking screenshots...", ToolTipIcon.Info);
+                notificationIcon.Text = "ScreenCapturer is taking screenshots.";
             }
             else
             {
-                this.listenerMouse.Enabled = false;
-                this.capturer.IsTakingShots = false;
-                this.notificationIcon.ShowBalloonTip(250, "ScreenCapturer", "SC has stopped taking screenshots...", ToolTipIcon.Info);
-                this.notificationIcon.Text = "ScreenCapturer is not taking screenshots.";
+                _listenerMouse.Enabled = false;
+                _capturer.IsTakingShots = false;
+                notificationIcon.ShowBalloonTip(250, "ScreenCapturer", "SC has stopped taking screenshots...", ToolTipIcon.Info);
+                notificationIcon.Text = "ScreenCapturer is not taking screenshots.";
             }
         }
 
@@ -248,13 +264,13 @@
         /// </summary>
         private void ToggleIsTakingScreenShots()
         {
-            if (this.capturer.IsTakingShots)
+            if (_capturer.IsTakingShots)
             {
-                this.EnableIsTakingScreenShots(false);
+                EnableIsTakingScreenShots(false);
             }
             else
             {
-                this.EnableIsTakingScreenShots(true);
+                EnableIsTakingScreenShots(true);
             }
         }
 
@@ -263,24 +279,28 @@
         /// </summary>
         private void SaveShots()
         {
-            this.capturer.IsTakingShots = false;
-            this.notificationIcon.ShowBalloonTip(250, "ScreenCapturer", string.Format("Saving {0} shots to file...", this.capturer.Shots.Count), ToolTipIcon.Info);
+            _capturer.IsTakingShots = false;
+            notificationIcon.ShowBalloonTip(250, "ScreenCapturer", string.Format("Saving {0} shots to file...", _capturer.Shots.Count), ToolTipIcon.Info);
             
-            var path = this.capturer.SaveShots();
+            var path = _capturer.SaveShots();
 
             if (path != null)
             {
-                this.notificationIcon.ShowBalloonTip(250, "ScreenCapturer", string.Format("Saved shots to \"{0}\"", path), ToolTipIcon.Info);
-                this.capturer.IsTakingShots = false;
+                notificationIcon.ShowBalloonTip(250, "ScreenCapturer", string.Format("Saved shots to \"{0}\"", path), ToolTipIcon.Info);
+                _capturer.IsTakingShots = false;
             }
             else
             {
-                this.notificationIcon.ShowBalloonTip(250, "ScreenCapturer", "No shots to save...", ToolTipIcon.Warning);
+                notificationIcon.ShowBalloonTip(250, "ScreenCapturer", "No shots to save...", ToolTipIcon.Warning);
             }
         }
 
         #region Utility
 
+        /// <summary>
+        /// Read which mouse buttons toggle a screenshot from the Settings file.
+        /// </summary>
+        /// <returns>Set of keys to listen for.</returns>
         private HashSet<MouseButtons> ReadActiveMouseButtons()
         {
             var result = new HashSet<MouseButtons>();
@@ -289,7 +309,7 @@
             {
                 MouseButtons button;
 
-                MouseButtons.TryParse(s, true, out button);
+                Enum.TryParse(s, true, out button);
 
                 result.Add(button);
             }
@@ -297,6 +317,39 @@
             return result;
         }
 
+        /// <summary>
+        /// Read which key toggles the screenshot mode from the Settings file.
+        /// </summary>
+        /// <returns>Key to listen for.</returns>
+        private Keys ReadToggleKey()
+        {
+            Keys toggleKey;
+
+            Enum.TryParse(Properties.Settings.Default.ToggleCaptureKey, true, out toggleKey);
+
+            return toggleKey;
+        }
+
+        /// <summary>
+        /// Read which key toggles a save from the Settings file.
+        /// </summary>
+        /// <returns>Key to listen for.</returns>
+        private Keys ReadSaveKey()
+        {
+            Keys toggleKey;
+
+            Enum.TryParse(Properties.Settings.Default.SaveKey, true, out toggleKey);
+
+            return toggleKey;
+        }
+
         #endregion
+
+        private void SettingsToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            var settings = new SettingsForm();
+
+            settings.Show(this);
+        }
     }
 }

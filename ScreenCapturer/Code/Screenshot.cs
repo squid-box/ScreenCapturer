@@ -12,11 +12,11 @@
     {
         #region Declarations
 
-        private DateTime timeCaptured;
-        private Bitmap image;
+        private DateTime _timeCaptured;
+        private readonly Bitmap _image;
 
-        private MouseEventArgs mouseDown;
-        private MouseEventArgs mouseUp;
+        private MouseEventArgs _mouseDown;
+        private MouseEventArgs _mouseUp;
 
         #endregion
 
@@ -24,13 +24,13 @@
 
         private Screenshot(MouseEventArgs mouseDown, MouseEventArgs mouseUp)
         {
-            this.image = this.CaptureScreen();
-            this.timeCaptured = DateTime.Now;
+            _image = CaptureScreen();
+            _timeCaptured = DateTime.Now;
 
-            this.mouseDown = mouseDown;
-            this.mouseUp = mouseUp;
+            _mouseDown = mouseDown;
+            _mouseUp = mouseUp;
 
-            MousePlotter.DrawMouseClickIcon(ref image, mouseDown, mouseUp);
+            MousePlotter.DrawMouseClickIcon(ref _image, mouseDown, mouseUp);
         }
 
         #endregion
@@ -49,7 +49,7 @@
         public int CompareTo(object obj)
         {
             var other = (Screenshot)obj;
-            return this.timeCaptured.CompareTo(other.timeCaptured);
+            return _timeCaptured.CompareTo(other._timeCaptured);
         }
 
         #endregion
@@ -74,7 +74,7 @@
         /// </summary>
         public void Dispose()
         {
-            this.image.Dispose();
+            _image.Dispose();
         }
 
         /// <summary>
@@ -84,8 +84,8 @@
         /// <returns>Path to saved file.</returns>
         public string SaveToFile(int prefixNumber)
         {
-            string filename = prefixNumber + "_" + Utility.DateToFileString(timeCaptured) + ".png";
-            this.image.Save(filename, ImageFormat.Png);
+            string filename = prefixNumber + "_" + Utility.DateToFileString(_timeCaptured) + ".png";
+            _image.Save(filename, ImageFormat.Png);
             
             return filename;
         }
