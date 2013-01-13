@@ -65,6 +65,9 @@ namespace ScreenCapturer
             Visible = false;
 
             _capturer = new Capturer();
+            
+            // TODO: Make this functionality better & work well for "folder path changed during runtime"...
+            System.IO.Directory.CreateDirectory(Settings.Default.SaveFolder);
 
             _lastShotTaken = 0;
             
@@ -317,6 +320,11 @@ namespace ScreenCapturer
             var settings = new SettingsForm();
 
             settings.Show(this);
+        }
+
+        private void OpenSavedFolderToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", Settings.Default.SaveFolder);
         }
     }
 }
