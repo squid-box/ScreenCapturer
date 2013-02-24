@@ -1,9 +1,10 @@
-﻿using System.Globalization;
-
-namespace ScreenCapturer
+﻿namespace ScreenCapturer
 {
     using System;
+    using System.Collections.Generic;
+    using System.Globalization;
     using System.Windows.Forms;
+
     using Properties;
 
     public partial class SettingsForm : Form
@@ -21,9 +22,14 @@ namespace ScreenCapturer
         /// </summary>
         private void LoadUiValues()
         {
-            checkedListBoxMouseKeyTriggers.DataSource = Enum.GetNames(typeof(MouseButtons));
-            comboBoxToggleShotKey.DataSource = Enum.GetNames(typeof(Keys));
-            comboBoxSaveKey.DataSource = Enum.GetNames(typeof(Keys));
+            var mouseKeys = new List<string>(Enum.GetNames(typeof(MouseButtons)));
+            mouseKeys.Remove("None");
+            checkedListBoxMouseKeyTriggers.DataSource = mouseKeys;
+
+            var keyboardKeys = new List<String>(Enum.GetNames(typeof(Keys)));
+            keyboardKeys.Remove("None");
+            comboBoxToggleShotKey.DataSource = keyboardKeys;
+            comboBoxSaveKey.DataSource = keyboardKeys;
         }
 
         /// <summary>

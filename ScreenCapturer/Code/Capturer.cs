@@ -1,6 +1,4 @@
-﻿using ScreenCapturer.Properties;
-
-namespace ScreenCapturer.Code
+﻿namespace ScreenCapturer.Code
 {
     using System;
     using System.Collections.Generic;
@@ -8,6 +6,8 @@ namespace ScreenCapturer.Code
     using System.Windows.Forms;
     
     using Ionic.Zip;
+
+    using Properties;
 
     /// <summary>
     /// The Capturer performs anything related to screencapturing and handling these captures.
