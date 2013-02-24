@@ -1,6 +1,4 @@
-﻿using ScreenCapturer.Properties;
-
-namespace ScreenCapturer
+﻿namespace ScreenCapturer
 {
     using System;
     using System.ComponentModel;
@@ -11,6 +9,8 @@ namespace ScreenCapturer
     using MouseKeyboardActivityMonitor.WinApi;
 
     using Code;
+    using Localizations;
+    using Properties;
 
     /// <summary>
     /// The main window of this program.
@@ -105,7 +105,7 @@ namespace ScreenCapturer
             if (_capturer.Shots.Count != 0)
             {
                 // There are still screenshots in the buffer! D:
-                var res = MessageBox.Show(this, "There are unsaved screenshots, do you want to save them?", "Unsaved data!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                var res = MessageBox.Show(this, strings.dialog_closingProgram_UnsavedContent, strings.dialog_closingProgram_UnsavedTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 
                 if (res == DialogResult.Yes)
                 {
@@ -266,15 +266,15 @@ namespace ScreenCapturer
             {
                 _listenerMouse.Enabled = true;
                 _capturer.IsTakingShots = true;
-                notificationIcon.ShowBalloonTip(250, "ScreenCapturer", "SC has started taking screenshots...", ToolTipIcon.Info);
-                notificationIcon.Text = "ScreenCapturer is taking screenshots.";
+                notificationIcon.ShowBalloonTip(250, strings.program_Name, strings.notificationIcon_StartedShooting, ToolTipIcon.Info);
+                notificationIcon.Text = strings.notificationIcon_IsTakingShots;
             }
             else
             {
                 _listenerMouse.Enabled = false;
                 _capturer.IsTakingShots = false;
-                notificationIcon.ShowBalloonTip(250, "ScreenCapturer", "SC has stopped taking screenshots...", ToolTipIcon.Info);
-                notificationIcon.Text = "ScreenCapturer is not taking screenshots.";
+                notificationIcon.ShowBalloonTip(250, strings.program_Name, strings.notificationIcon_StoppedShooting, ToolTipIcon.Info);
+                notificationIcon.Text = strings.notificationIcon_IsNotTakingShots;
             }
         }
 
@@ -284,14 +284,7 @@ namespace ScreenCapturer
         /// </summary>
         private void ToggleIsTakingScreenShots()
         {
-            if (_capturer.IsTakingShots)
-            {
-                EnableIsTakingScreenShots(false);
-            }
-            else
-            {
-                EnableIsTakingScreenShots(true);
-            }
+            EnableIsTakingScreenShots(!_capturer.IsTakingShots);
         }
 
         /// <summary>
@@ -300,18 +293,18 @@ namespace ScreenCapturer
         private void SaveShots()
         {
             _capturer.IsTakingShots = false;
-            notificationIcon.ShowBalloonTip(250, "ScreenCapturer", string.Format("Saving {0} shots to file...", _capturer.Shots.Count), ToolTipIcon.Info);
+            notificationIcon.ShowBalloonTip(250, strings.program_Name, string.Format(strings.notificationIcon_SavingFiles, _capturer.Shots.Count), ToolTipIcon.Info);
             
             var path = _capturer.SaveShots();
 
             if (path != null)
             {
-                notificationIcon.ShowBalloonTip(250, "ScreenCapturer", string.Format("Saved shots to \"{0}\"", path), ToolTipIcon.Info);
+                notificationIcon.ShowBalloonTip(250, strings.program_Name, string.Format(strings.notificationIcon_SavedFiles, path), ToolTipIcon.Info);
                 _capturer.IsTakingShots = false;
             }
             else
             {
-                notificationIcon.ShowBalloonTip(250, "ScreenCapturer", "No shots to save...", ToolTipIcon.Warning);
+                notificationIcon.ShowBalloonTip(250, strings.program_Name, strings.notificationIcon_NoFilesToSave, ToolTipIcon.Warning);
             }
         }
 

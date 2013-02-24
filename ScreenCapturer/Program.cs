@@ -1,4 +1,6 @@
-﻿namespace ScreenCapturer
+﻿using ScreenCapturer.Localizations;
+
+namespace ScreenCapturer
 {
     using System;
     using System.Threading;
@@ -27,7 +29,7 @@
             }
             else
             {
-                MessageBox.Show("Another instance of this program is already running!", "Screen Capturer", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(strings.dialog_MultipleInstance_Content, strings.program_Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

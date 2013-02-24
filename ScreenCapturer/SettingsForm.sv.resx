@@ -117,168 +117,38 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="buttonCancel.Text" xml:space="preserve">
+    <value>Avbryt</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="labelToggleKey.Size" type="System.Drawing.Size, System.Drawing">
-    <value>111, 13</value>
-  </data>
-  <data name="labelBufferSize.Text" xml:space="preserve">
-    <value>Number of shots to keep:</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="labelToggleKey.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="labelSaveKey.Size" type="System.Drawing.Size, System.Drawing">
-    <value>107, 13</value>
-  </data>
-  <data name="buttonCancel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>230, 231</value>
-  </data>
-  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>317, 263</value>
-  </data>
-  <data name="buttonOK.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
-  </data>
   <data name="labelSavepath.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 13</value>
-  </data>
-  <data name="labelMouseKeyTriggers.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="labelSavepath.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 9</value>
-  </data>
-  <data name="labelSaveKey.Location" type="System.Drawing.Point, System.Drawing">
-    <value>179, 169</value>
-  </data>
-  <data name="labelToggleKey.Text" xml:space="preserve">
-    <value>Key to toggle capture:</value>
-  </data>
-  <data name="labelBufferSize.Size" type="System.Drawing.Size, System.Drawing">
-    <value>126, 13</value>
-  </data>
-  <data name="numericUpDownBufferSize.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="labelMouseKeyTriggers.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 13</value>
+    <value>89, 13</value>
   </data>
   <data name="labelSavepath.Text" xml:space="preserve">
-    <value>Save path:</value>
+    <value>Plats för fillagring:</value>
   </data>
-  <data name="labelSavepath.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="buttonCancel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
-  </data>
-  <data name="comboBoxSaveKey.MaxDropDownItems" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="comboBoxSaveKey.Size" type="System.Drawing.Size, System.Drawing">
-    <value>121, 21</value>
-  </data>
-  <data name="labelBufferSize.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="buttonOK.Location" type="System.Drawing.Point, System.Drawing">
-    <value>149, 231</value>
-  </data>
-  <data name="comboBoxToggleShotKey.Size" type="System.Drawing.Size, System.Drawing">
-    <value>121, 21</value>
-  </data>
-  <data name="labelSaveKey.Text" xml:space="preserve">
-    <value>Key to toggle a save:</value>
-  </data>
-  <data name="checkedListBoxMouseKeyTriggers.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 77</value>
-  </data>
-  <data name="buttonCancel.Text" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="buttonOK.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="labelBufferSize.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
-  </data>
-  <data name="labelMouseKeyTriggers.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="numericUpDownBufferSize.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 234</value>
-  </data>
-  <data name="textBoxSavepath.Size" type="System.Drawing.Size, System.Drawing">
-    <value>291, 20</value>
-  </data>
-  <data name="comboBoxToggleShotKey.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 185</value>
-  </data>
-  <data name="comboBoxToggleShotKey.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="labelSaveKey.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="labelSaveKey.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
-  </data>
-  <data name="textBoxSavepath.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
+  <data name="labelMouseKeyTriggers.Size" type="System.Drawing.Size, System.Drawing">
+    <value>159, 13</value>
   </data>
   <data name="labelMouseKeyTriggers.Text" xml:space="preserve">
-    <value>Mouse keys that trigger screenshots:</value>
+    <value>Musknapp för att ta skärmdump:</value>
   </data>
-  <data name="checkedListBoxMouseKeyTriggers.Size" type="System.Drawing.Size, System.Drawing">
-    <value>291, 79</value>
+  <data name="labelToggleKey.Text" xml:space="preserve">
+    <value>Tangent för att ta bild:</value>
   </data>
-  <data name="labelSavepath.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
+  <data name="labelBufferSize.Size" type="System.Drawing.Size, System.Drawing">
+    <value>114, 13</value>
   </data>
-  <data name="buttonOK.Text" xml:space="preserve">
-    <value>OK</value>
+  <data name="labelBufferSize.Text" xml:space="preserve">
+    <value>Antal bilder att behålla:</value>
   </data>
-  <data name="buttonCancel.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
+  <data name="labelSaveKey.Size" type="System.Drawing.Size, System.Drawing">
+    <value>109, 13</value>
   </data>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 13</value>
-  </data>
-  <data name="labelToggleKey.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="comboBoxToggleShotKey.MaxDropDownItems" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="labelToggleKey.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 169</value>
+  <data name="labelSaveKey.Text" xml:space="preserve">
+    <value>Tangent för att spara:</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>Screen Capturer Settings</value>
+    <value>Inställningar för Screen Capturer</value>
   </data>
-  <data name="numericUpDownBufferSize.Size" type="System.Drawing.Size, System.Drawing">
-    <value>52, 20</value>
-  </data>
-  <data name="comboBoxSaveKey.Location" type="System.Drawing.Point, System.Drawing">
-    <value>179, 185</value>
-  </data>
-  <data name="textBoxSavepath.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 25</value>
-  </data>
-  <data name="checkedListBoxMouseKeyTriggers.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="comboBoxSaveKey.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="labelMouseKeyTriggers.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 61</value>
-  </data>
-  <data name="labelBufferSize.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 218</value>
-  </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
 </root>
