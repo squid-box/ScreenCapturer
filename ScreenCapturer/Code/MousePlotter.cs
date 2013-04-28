@@ -34,7 +34,12 @@
             pen.Dispose();
         }
 
-        public static void DrawMouseDoubleClickIcon(ref Bitmap target, MouseEventArgs mouseDown, MouseEventArgs mouseUp)
+        /// <summary>
+        /// Draws an icon indicating where a mouse double click was performed.
+        /// </summary>
+        /// <param name="target">Graphics object to draw icon on.</param>
+        /// <param name="mouseUp">Event where mouse click was released.</param>
+        public static void DrawMouseDoubleClickIcon(ref Bitmap target, MouseEventArgs mouseUp)
         {
             var graph = Graphics.FromImage(target);
             const int diameter = 16;

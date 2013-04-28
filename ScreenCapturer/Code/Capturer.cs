@@ -8,6 +8,7 @@
     using Ionic.Zip;
 
     using Properties;
+    using ScreenCapturer.Properties;
 
     /// <summary>
     /// The Capturer performs anything related to screencapturing and handling these captures.

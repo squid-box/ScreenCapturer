@@ -32,7 +32,7 @@
 
             if (doubleClick)
             {
-                MousePlotter.DrawMouseDoubleClickIcon(ref _image, mouseDown, mouseUp);
+                MousePlotter.DrawMouseDoubleClickIcon(ref _image, mouseUp);
             }
             else
             {
