@@ -36,78 +36,110 @@
         [Test]
         public void TakeShotTest()
         {
-            // No shots in capturer at start.
-            Assert.AreEqual(0, _capturer.Shots.Count);
+            try
+            {
+                // No shots in capturer at start.
+                Assert.AreEqual(0, capturer.Shots.Count);
 
-            _capturer.IsTakingShots = true;
+                capturer.IsTakingShots = true;
 
-            // Take shot and check
-            _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
-            Assert.AreEqual(1, _capturer.Shots.Count);
+                // Take shot and check
+                capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
+                Assert.AreEqual(1, capturer.Shots.Count);
 
-            _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
-            _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
-            Assert.AreEqual(3, _capturer.Shots.Count);
+                capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
+                capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
+                Assert.AreEqual(3, capturer.Shots.Count);
 
-            _capturer.TakeShot(_mouseDragDown, _mouseDragUp, false);
-            Assert.AreEqual(4, _capturer.Shots.Count);
+                capturer.TakeShot(mouseDragDown, mouseDragUp, false);
+                Assert.AreEqual(4, capturer.Shots.Count);
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                // Most likely a "The handle is invalid" exception.  No UI on test runner.
+                Assert.Ignore("Test runner does not have access to UI.");
+            }
         }
 
         [Test]
         public void CheckShotsBufferTest()
         {
-            // No shots in capturer at start.
-            Assert.AreEqual(0, _capturer.Shots.Count);
-
-            _capturer.IsTakingShots = true;
-
-            // Fill the Shots to the "buffer limit"
-            for (var i = 0; i < _capturer.Buffersize+1; i++)
+            try
             {
-                _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
+                // No shots in capturer at start.
+                Assert.AreEqual(0, capturer.Shots.Count);
+
+                capturer.IsTakingShots = true;
+
+                // Fill the Shots to the "buffer limit"
+                for (var i = 0; i < capturer.Buffersize + 1; i++)
+                {
+                    capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
+                }
+
+                // Assert that limit is reached.
+                Assert.AreEqual(capturer.Buffersize, capturer.Shots.Count);
+
+                // Assert that limit is not breached.
+                capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
+                Assert.AreEqual(capturer.Buffersize, capturer.Shots.Count);
             }
-
-            // Assert that limit is reached.
-            Assert.AreEqual(_capturer.Buffersize, _capturer.Shots.Count);
-
-            // Assert that limit is not breached.
-            _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
-            Assert.AreEqual(_capturer.Buffersize, _capturer.Shots.Count);
+            catch (System.ComponentModel.Win32Exception)
+            {
+                // Most likely a "The handle is invalid" exception.  No UI on test runner.
+                Assert.Ignore("Test runner does not have access to UI.");
+            }
         }
 
         [Test]
         public void CheckIsTakingShotsWorksTest()
         {
-            // No shots in capturer at start.
-            Assert.AreEqual(0, _capturer.Shots.Count);
+            try
+            {
+                // No shots in capturer at start.
+                Assert.AreEqual(0, capturer.Shots.Count);
 
-            _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
-            Assert.AreEqual(0, _capturer.Shots.Count);
+                capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
+                Assert.AreEqual(0, capturer.Shots.Count);
 
-            _capturer.IsTakingShots = true;
+                capturer.IsTakingShots = true;
 
-            _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
-            Assert.AreEqual(1, _capturer.Shots.Count);
+                capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
+                Assert.AreEqual(1, capturer.Shots.Count);
 
-            _capturer.IsTakingShots = false;
-            _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
-            Assert.AreEqual(1, _capturer.Shots.Count);
+                capturer.IsTakingShots = false;
+                capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
+                Assert.AreEqual(1, capturer.Shots.Count);
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                // Most likely a "The handle is invalid" exception.  No UI on test runner.
+                Assert.Ignore("Test runner does not have access to UI.");
+            }
         }
 
         [Test]
         public void SaveFilesClearShotsTest()
         {
-            // No shots in capturer at start.
-            Assert.AreEqual(0, _capturer.Shots.Count);
+            try
+            {
+                // No shots in capturer at start.
+                Assert.AreEqual(0, capturer.Shots.Count);
 
-            _capturer.IsTakingShots = true;
-            _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
+                capturer.IsTakingShots = true;
+                capturer.TakeShot(mouseLeftDown1, mouseLeftUp1, false);
 
-            // Save shot to file, then remove the zip immediately.
-            _capturer.SaveShots();
-            System.IO.Directory.Delete(ScreenCapturer.Properties.Settings.Default.SaveFolder, true);
+                // Save shot to file, then remove the zip immediately.
+                capturer.SaveShots();
+                System.IO.Directory.Delete(ScreenCapturer.Properties.Settings.Default.SaveFolder, true);
 
-            Assert.AreEqual(0, _capturer.Shots.Count);
+                Assert.AreEqual(0, capturer.Shots.Count);
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+                // Most likely a "The handle is invalid" exception.  No UI on test runner.
+                Assert.Ignore("Test runner does not have access to UI.");
+            }
         }
     }
 }
