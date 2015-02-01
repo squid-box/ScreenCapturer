@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Capturer.cs" />
+    <Compile Include="Code\Logger.cs" />
     <Compile Include="Code\MousePlotter.cs" />
     <Compile Include="Code\Screenshot.cs" />
     <Compile Include="Localizations\strings.se.Designer.cs">
@@ -87,6 +88,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Code\LogLevel.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

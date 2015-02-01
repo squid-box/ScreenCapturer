@@ -90,30 +90,33 @@
         /// <param name="e">Event arguments.</param>
         private void MainWindowFormClosing(object sender, FormClosingEventArgs e)
         {
+            Logger.Instance.Debug("Program closing");
+
             // Hopefully removes all hooks.
             try
             {
                 _listenerKeyboard.Dispose();
                 _listenerMouse.Dispose();
             }
-            catch (Win32Exception)
+            catch (Win32Exception exc)
             {
                 // Listeners have already been disposed, probably.
                 // See http://globalmousekeyhook.codeplex.com/workitem/929
+                Logger.Instance.Exception("Disposing keyhooks, exception ignored.", exc);
             }
 
             if (_capturer.Shots.Count != 0)
             {
+                Logger.Instance.Debug("Shots left in buffer.");
                 // There are still screenshots in the buffer! D:
                 var res = MessageBox.Show(this, strings.dialog_closingProgram_UnsavedContent, strings.dialog_closingProgram_UnsavedTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 
                 if (res == DialogResult.Yes)
                 {
+                    Logger.Instance.Debug("Saving screenshots before exiting.");
                     SaveShots();
                 }
             }
-
-            notificationIcon.Visible = false;
         }
 
         #region Event handling
