@@ -34,6 +34,10 @@
             this.notificationContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.notificationMenuToggle = new System.Windows.Forms.ToolStripMenuItem();
             this.notificationMenuSave = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.openSavedFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.notificationMenuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.notificationContextMenu.SuspendLayout();
@@ -42,59 +46,75 @@
             // notificationIcon
             // 
             this.notificationIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.notificationIcon.BalloonTipTitle = "ScreenCapturer";
+            resources.ApplyResources(this.notificationIcon, "notificationIcon");
             this.notificationIcon.ContextMenuStrip = this.notificationContextMenu;
-            this.notificationIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notificationIcon.Icon")));
-            this.notificationIcon.Text = "ScreenCapturer is not taking screenshots.";
-            this.notificationIcon.Visible = true;
             this.notificationIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotificationIconMouseClick);
             // 
             // notificationContextMenu
             // 
+            resources.ApplyResources(this.notificationContextMenu, "notificationContextMenu");
             this.notificationContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.notificationMenuToggle,
             this.notificationMenuSave,
+            this.toolStripSeparator2,
+            this.openSavedFolderToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.settingsToolStripMenuItem,
             this.toolStripSeparator1,
             this.notificationMenuExit});
             this.notificationContextMenu.Name = "notificationContextMenu";
-            this.notificationContextMenu.Size = new System.Drawing.Size(163, 76);
             // 
             // notificationMenuToggle
             // 
+            resources.ApplyResources(this.notificationMenuToggle, "notificationMenuToggle");
             this.notificationMenuToggle.Name = "notificationMenuToggle";
-            this.notificationMenuToggle.Size = new System.Drawing.Size(162, 22);
-            this.notificationMenuToggle.Text = "Toggle capture";
             this.notificationMenuToggle.Click += new System.EventHandler(this.NotificationMenuToggleClick);
             // 
             // notificationMenuSave
             // 
+            resources.ApplyResources(this.notificationMenuSave, "notificationMenuSave");
             this.notificationMenuSave.Name = "notificationMenuSave";
-            this.notificationMenuSave.Size = new System.Drawing.Size(162, 22);
-            this.notificationMenuSave.Text = "Save shots to file";
-            this.notificationMenuSave.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.notificationMenuSave.Click += new System.EventHandler(this.NotificationMenuSaveClick);
+            // 
+            // toolStripSeparator2
+            // 
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            // 
+            // openSavedFolderToolStripMenuItem
+            // 
+            resources.ApplyResources(this.openSavedFolderToolStripMenuItem, "openSavedFolderToolStripMenuItem");
+            this.openSavedFolderToolStripMenuItem.Name = "openSavedFolderToolStripMenuItem";
+            this.openSavedFolderToolStripMenuItem.Click += new System.EventHandler(this.OpenSavedFolderToolStripMenuItemClick);
+            // 
+            // toolStripSeparator3
+            // 
+            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            // 
+            // settingsToolStripMenuItem
+            // 
+            resources.ApplyResources(this.settingsToolStripMenuItem, "settingsToolStripMenuItem");
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.SettingsToolStripMenuItemClick);
             // 
             // toolStripSeparator1
             // 
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(159, 6);
             // 
             // notificationMenuExit
             // 
+            resources.ApplyResources(this.notificationMenuExit, "notificationMenuExit");
             this.notificationMenuExit.Name = "notificationMenuExit";
-            this.notificationMenuExit.Size = new System.Drawing.Size(162, 22);
-            this.notificationMenuExit.Text = "Exit";
             this.notificationMenuExit.Click += new System.EventHandler(this.NotificationMenuExitClick);
             // 
             // MainWindow
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(184, 162);
             this.ControlBox = false;
-            this.Enabled = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainWindow";
@@ -114,6 +134,10 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 
         #endregion
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openSavedFolderToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     }
 }
 

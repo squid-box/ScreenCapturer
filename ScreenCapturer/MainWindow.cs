@@ -8,6 +8,10 @@
     using MouseKeyboardActivityMonitor;
     using MouseKeyboardActivityMonitor.WinApi;
 
+    using Code;
+    using Localizations;
+    using Properties;
+
     /// <summary>
     /// The main window of this program.
     /// </summary>
@@ -18,22 +22,37 @@
         /// <summary>
         /// Listens for global mouse events.
         /// </summary>
-        private readonly MouseHookListener listenerMouse;
+        private readonly MouseHookListener _listenerMouse;
 
         /// <summary>
         /// Listens for global keyboard events.
         /// </summary>
-        private readonly KeyboardHookListener listenerKeyboard;
+        private readonly KeyboardHookListener _listenerKeyboard;
 
         /// <summary>
         /// Performs all screencapturing actions.
         /// </summary>
-        private readonly Capturer capturer;
+        private readonly Capturer _capturer;
+
+        /// <summary>
+        /// Latest mouseDown event arguments, used for drawing drag 'n drop lines.
+        /// </summary>
+        private MouseEventArgs _lastMouseDownEvent;
 
         /// <summary>
         /// Indicates whether or not the next shot should be ignored.
         /// </summary>
-        private bool ignoreNextShot;
+        private bool _ignoreNextShot;
+
+        /// <summary>
+        /// System time when last shot was taken, used to detect double clicks.
+        /// </summary>
+        private long _lastShotTaken;
+        
+        /// <summary>
+        /// Defines the maximum amount of milliseconds there can be between two clicks to define the two clicks as a doubleclick.
+        /// </summary>
+        private const long DoubleclickThreshold = 500;
 
         #endregion
 
@@ -42,19 +61,26 @@
         /// </summary>
         public MainWindow()
         {
-            this.InitializeComponent();
+            InitializeComponent();
+            Visible = false;
 
-            this.capturer = new Capturer();
+            _capturer = new Capturer();
             
-            this.listenerKeyboard = new KeyboardHookListener(new GlobalHooker());
-            this.listenerMouse = new MouseHookListener(new GlobalHooker());
+            // TODO: Make this functionality better & work well for "folder path changed during runtime"...
+            System.IO.Directory.CreateDirectory(Settings.Default.SaveFolder);
 
-            this.listenerKeyboard.Enabled = true;
-            this.listenerMouse.Enabled = true;
+            _lastShotTaken = 0;
+            
+            _listenerKeyboard = new KeyboardHookListener(new GlobalHooker());
+            _listenerMouse = new MouseHookListener(new GlobalHooker());
+
+            _listenerKeyboard.Enabled = true;
+            _listenerMouse.Enabled = true;
 
             // Start listening to Mouse- and KeyDown.
-            this.listenerKeyboard.KeyDown += this.ListenerKeyboardKeyDown;
-            this.listenerMouse.MouseClick += this.ListenerMouseMouseDown;
+            _listenerKeyboard.KeyDown += ListenerKeyboardKeyDown;
+            _listenerMouse.MouseDown += ListenerMouseMouseDown;
+            _listenerMouse.MouseUp += ListenerMouseMouseUp;
         }
 
         /// <summary>
@@ -64,68 +90,111 @@
         /// <param name="e">Event arguments.</param>
         private void MainWindowFormClosing(object sender, FormClosingEventArgs e)
         {
+            Logger.Instance.Debug("Program closing");
+
             // Hopefully removes all hooks.
             try
             {
-                this.listenerKeyboard.Dispose();
-                this.listenerMouse.Dispose();
+                _listenerKeyboard.Dispose();
+                _listenerMouse.Dispose();
             }
-            catch (Win32Exception)
+            catch (Win32Exception exc)
             {
                 // Listeners have already been disposed, probably.
                 // See http://globalmousekeyhook.codeplex.com/workitem/929
+                Logger.Instance.Exception("Disposing keyhooks, exception ignored.", exc);
             }
 
-            if (this.capturer.Shots.Count != 0)
+            if (_capturer.Shots.Count != 0)
             {
+                Logger.Instance.Debug("Shots left in buffer.");
                 // There are still screenshots in the buffer! D:
-                DialogResult res = MessageBox.Show(this, "There are unsaved screenshots, do you want to save them?", "Unsaved data!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                var res = MessageBox.Show(this, strings.dialog_closingProgram_UnsavedContent, strings.dialog_closingProgram_UnsavedTitle, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 
                 if (res == DialogResult.Yes)
                 {
-                    this.SaveShots();
+                    Logger.Instance.Debug("Saving screenshots before exiting.");
+                    SaveShots();
                 }
             }
-
-            this.notificationIcon.Visible = false;
         }
 
         #region Event handling
 
         /// <summary>
-        /// Captures mousepresses handled here.
+        /// Determines if the mouse button should trigger a screenshot.
+        /// </summary>
+        /// <param name="button"></param>
+        /// <returns></returns>
+        private bool IsMouseButtonActive(MouseButtons button)
+        {
+            return Settings.Default.MouseKeyTriggers.Contains(button.ToString());
+        }
+
+        /// <summary>
+        /// First part of the capturing process, saves this MouseEvent for <see cref="ListenerMouseMouseUp"/>.
         /// </summary>
         /// <param name="sender">Event sender.</param>
         /// <param name="e">Event information.</param>
         private void ListenerMouseMouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            if (IsMouseButtonActive(e.Button))
             {
-                if (this.ignoreNextShot)
+                if (_ignoreNextShot)
                 {
-                    this.ignoreNextShot = false;
                     return;
                 }
 
-                this.capturer.TakeShot(e);
+                _lastMouseDownEvent = e;
             }
         }
 
         /// <summary>
-        /// Captures keypresses are handled here.
+        /// Actually performs the capturing actions.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ListenerMouseMouseUp(object sender, MouseEventArgs e)
+        {
+            if (IsMouseButtonActive(e.Button))
+            {
+                if (_ignoreNextShot)
+                {
+                    _ignoreNextShot = false;
+                    return;
+                }
+
+                _capturer.TakeShot(e, _lastMouseDownEvent, DoubleClickDetected());
+                _lastShotTaken = Environment.TickCount;
+            }
+        }
+
+        /// <summary>
+        /// Checks if a click is close enough to the previous one to define a double click.
+        /// </summary>
+        /// <returns>True if double click, false if not.</returns>
+        private bool DoubleClickDetected()
+        {
+            var now = Environment.TickCount;
+
+            return (now - _lastShotTaken) < DoubleclickThreshold;
+        }
+
+        /// <summary>
+        /// Captured keypresses are handled here.
         /// </summary>
         /// <param name="sender">Event sender.</param>
         /// <param name="e">Event information.</param>
         private void ListenerKeyboardKeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.KeyCode)
+            if (e.KeyCode.ToString() == Settings.Default.ToggleCaptureKey)
             {
-                case Keys.F12:
-                    this.ToggleIsTakingScreenShots();
-                    break;
-                case Keys.F11:
-                    this.SaveShots();
-                    break;
+                ToggleIsTakingScreenShots();
+            }
+            
+            if (e.KeyCode.ToString() == Settings.Default.SaveKey)
+            {
+                SaveShots();
             }
         }
 
@@ -138,7 +207,7 @@
         /// <param name="e">Event data.</param>
         private void NotificationMenuExitClick(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         /// <summary>
@@ -148,7 +217,7 @@
         /// <param name="e">Event data.</param>
         private void NotificationMenuToggleClick(object sender, EventArgs e)
         {
-            this.ToggleIsTakingScreenShots();
+            ToggleIsTakingScreenShots();
         }
 
         /// <summary>
@@ -158,7 +227,7 @@
         /// <param name="e">Event data.</param>
         private void NotificationMenuSaveClick(object sender, EventArgs e)
         {
-            this.SaveShots();
+            SaveShots();
         }
 
         /// <summary>
@@ -168,7 +237,7 @@
         /// <param name="e">Event data.</param>
         private void MainWindowLoad(object sender, EventArgs e)
         {
-            this.Size = new Size(0, 0);
+            Size = new Size(0, 0);
         }
 
         /// <summary>
@@ -180,7 +249,7 @@
         {
             if (e.Button == MouseButtons.Right)
             {
-                this.ignoreNextShot = true;
+                _ignoreNextShot = true;
             }
         }
 
@@ -198,17 +267,17 @@
         {
             if (enable)
             {
-                this.listenerMouse.Enabled = true;
-                this.capturer.IsTakingShots = true;
-                this.notificationIcon.ShowBalloonTip(250, "ScreenCapturer", "SC has started taking screenshots...", ToolTipIcon.Info);
-                this.notificationIcon.Text = "ScreenCapturer is taking screenshots.";
+                _listenerMouse.Enabled = true;
+                _capturer.IsTakingShots = true;
+                notificationIcon.ShowBalloonTip(250, strings.program_Name, strings.notificationIcon_StartedShooting, ToolTipIcon.Info);
+                notificationIcon.Text = strings.notificationIcon_IsTakingShots;
             }
             else
             {
-                this.listenerMouse.Enabled = false;
-                this.capturer.IsTakingShots = false;
-                this.notificationIcon.ShowBalloonTip(250, "ScreenCapturer", "SC has stopped taking screenshots...", ToolTipIcon.Info);
-                this.notificationIcon.Text = "ScreenCapturer is not taking screenshots.";
+                _listenerMouse.Enabled = false;
+                _capturer.IsTakingShots = false;
+                notificationIcon.ShowBalloonTip(250, strings.program_Name, strings.notificationIcon_StoppedShooting, ToolTipIcon.Info);
+                notificationIcon.Text = strings.notificationIcon_IsNotTakingShots;
             }
         }
 
@@ -218,14 +287,7 @@
         /// </summary>
         private void ToggleIsTakingScreenShots()
         {
-            if (this.capturer.IsTakingShots)
-            {
-                this.EnableIsTakingScreenShots(false);
-            }
-            else
-            {
-                this.EnableIsTakingScreenShots(true);
-            }
+            EnableIsTakingScreenShots(!_capturer.IsTakingShots);
         }
 
         /// <summary>
@@ -233,20 +295,32 @@
         /// </summary>
         private void SaveShots()
         {
-            this.capturer.IsTakingShots = false;
-            this.notificationIcon.ShowBalloonTip(250, "ScreenCapturer", string.Format("Saving {0} shots to file...", this.capturer.Shots.Count), ToolTipIcon.Info);
+            _capturer.IsTakingShots = false;
+            notificationIcon.ShowBalloonTip(250, strings.program_Name, string.Format(strings.notificationIcon_SavingFiles, _capturer.Shots.Count), ToolTipIcon.Info);
             
-            var path = this.capturer.SaveShots("logs");
+            var path = _capturer.SaveShots();
 
             if (path != null)
             {
-                this.notificationIcon.ShowBalloonTip(250, "ScreenCapturer", string.Format("Saved shots to \"{0}\"", path), ToolTipIcon.Info);
-                this.capturer.IsTakingShots = false;
+                notificationIcon.ShowBalloonTip(250, strings.program_Name, string.Format(strings.notificationIcon_SavedFiles, path), ToolTipIcon.Info);
+                _capturer.IsTakingShots = false;
             }
             else
             {
-                this.notificationIcon.ShowBalloonTip(250, "ScreenCapturer", "No shots to save...", ToolTipIcon.Warning);
+                notificationIcon.ShowBalloonTip(250, strings.program_Name, strings.notificationIcon_NoFilesToSave, ToolTipIcon.Warning);
             }
+        }
+
+        private void SettingsToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            var settings = new SettingsForm();
+
+            settings.Show(this);
+        }
+
+        private void OpenSavedFolderToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", Settings.Default.SaveFolder);
         }
     }
 }
