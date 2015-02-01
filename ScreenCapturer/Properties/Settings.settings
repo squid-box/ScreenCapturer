@@ -21,5 +21,14 @@
     <Setting Name="SaveKey" Type="System.String" Scope="User">
       <Value Profile="(Default)">F11</Value>
     </Setting>
+    <Setting Name="ColorLeft" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Red</Value>
+    </Setting>
+    <Setting Name="ColorRight" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Blue</Value>
+    </Setting>
+    <Setting Name="ColorOther" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Lime</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

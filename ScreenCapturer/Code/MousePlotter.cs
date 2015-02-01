@@ -18,7 +18,23 @@
         {
             var graph = Graphics.FromImage(target);
             const int diameter = 16;
-            var pen = new Pen(Color.Red, 1.0f);
+
+            Color clickColor;
+
+            if (mouseDown.Button == MouseButtons.Left)
+            {
+                clickColor = Properties.Settings.Default.ColorLeft;
+            }
+            else if (mouseDown.Button == MouseButtons.Right)
+            {
+                clickColor = Properties.Settings.Default.ColorRight;
+            }
+            else
+            {
+                clickColor = Properties.Settings.Default.ColorOther;
+            }
+
+            var pen = new Pen(clickColor, 1.0f);
 
             // Always draw a circle at the mouseUp event.
             DrawCircleDot(ref graph, mouseUp.Location, pen, diameter);
