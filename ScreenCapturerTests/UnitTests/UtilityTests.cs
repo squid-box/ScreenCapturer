@@ -112,7 +112,7 @@
             _dt = new DateTime(2012, 1, 1, 0, 0, 0);
             var result = Utility.DateToFileString(_dt);
 
-            Assert.AreEqual(result, "2012-01-01_00.00.00");
+            Assert.AreEqual("2012-01-01_00.00.00", result);
         }
 
         #endregion

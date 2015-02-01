@@ -16,6 +16,7 @@
         /// <returns>True if points are far from each other, false if they are close.</returns>
         internal static bool ArePointsFarFromEachother(Point first, Point second)
         {
+            // Threshold counted in pixels.
             const double threshold = 16;
 
             var distance = Math.Sqrt(Math.Pow((second.X - first.X),2) + Math.Pow((second.Y - first.Y),2));
@@ -30,32 +31,13 @@
         /// <returns>Windows-friendly text.</returns>
         internal static string DateToFileString(DateTime dt)
         {
-            var date = dt.ToShortDateString();
-
-            var time = string.Empty;
-
-            if (dt.Hour < 10)
-            {
-                time += "0";
-            }
-
-            time += dt.Hour + ".";
-
-            if (dt.Minute < 10)
-            {
-                time += "0";
-            }
-
-            time += dt.Minute + ".";
-
-            if (dt.Second < 10)
-            {
-                time += "0";
-            }
-
-            time += dt.Second;
-
-            return date + "_" + time;
+            return string.Format("{0,4:D4}-{1,2:D2}-{2,2:D2}_{3,2:D2}.{4,2:D2}.{5,2:D2}", 
+                dt.Year,
+                dt.Month,
+                dt.Day,
+                dt.Hour,
+                dt.Minute,
+                dt.Second);
         }
     }
 }
