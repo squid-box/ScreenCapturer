@@ -26,10 +26,13 @@
             mouseKeys.Remove("None");
             checkedListBoxMouseKeyTriggers.DataSource = mouseKeys;
 
-            var keyboardKeys = new List<String>(Enum.GetNames(typeof(Keys)));
-            keyboardKeys.Remove("None");
-            comboBoxToggleShotKey.DataSource = keyboardKeys;
-            comboBoxSaveKey.DataSource = keyboardKeys;
+            var toggleShotKeys = new List<String>(Enum.GetNames(typeof(Keys)));
+            toggleShotKeys.Remove("None");
+            comboBoxToggleShotKey.DataSource = toggleShotKeys;
+
+            var saveKeys = new List<string>(toggleShotKeys);
+
+            comboBoxSaveKey.DataSource = saveKeys;
         }
 
         /// <summary>
