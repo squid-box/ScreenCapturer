@@ -12,12 +12,23 @@
     {
         #region Declarations
 
-        public DateTime TimeCaptured { get; private set; }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public Bitmap Image
         {
             get { return _image; }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public DateTime TimeCaptured { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ScreenshotArgs Arguments { get; private set; }
 
         private Bitmap _image;
 
@@ -29,15 +40,7 @@
         {
             _image = CaptureScreen();
             TimeCaptured = DateTime.Now;
-
-            if (args.DoubleClick)
-            {
-                MousePlotter.DrawMouseDoubleClickIcon(ref _image, args.MouseUp);
-            }
-            else
-            {
-                MousePlotter.DrawMouseClickIcon(ref _image, args.MouseDown, args.MouseUp);
-            }
+            Arguments = args;
         }
 
         #endregion
@@ -85,6 +88,21 @@
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        private void PlotArgsOnImage(ref Bitmap image, ScreenshotArgs args)
+        {
+            if (Arguments.DoubleClick)
+            {
+                MousePlotter.DrawMouseDoubleClickIcon(ref image, args.MouseUp);
+            }
+            else
+            {
+                MousePlotter.DrawMouseClickIcon(ref image, args.MouseDown, args.MouseUp);
+            }
+        }
+
+        /// <summary>
         /// Saves the screenshot to a file.
         /// </summary>
         /// <param name="prefixNumber">Number prefixing this file.</param>
@@ -92,6 +110,12 @@
         public string SaveToFile(int prefixNumber)
         {
             var filename = prefixNumber + "_" + Utility.DateToFileString(TimeCaptured) + ".png";
+
+            if (Properties.Settings.Default.DrawMousePlot)
+            {
+                PlotArgsOnImage(ref _image, Arguments);
+            }
+                
             Image.Save(filename, ImageFormat.Png);
             
             return filename;

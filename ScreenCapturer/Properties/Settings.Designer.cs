@@ -144,5 +144,17 @@ namespace ScreenCapturer.Properties {
                 this["LogLevel"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DrawMousePlot {
+            get {
+                return ((bool)(this["DrawMousePlot"]));
+            }
+            set {
+                this["DrawMousePlot"] = value;
+            }
+        }
     }
 }
