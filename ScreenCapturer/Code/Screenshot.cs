@@ -12,31 +12,31 @@
     {
         #region Declarations
 
-        private DateTime _timeCaptured;
-        private readonly Bitmap _image;
+        public DateTime TimeCaptured { get; private set; }
 
-        private MouseEventArgs _mouseDown;
-        private MouseEventArgs _mouseUp;
+        public Bitmap Image
+        {
+            get { return _image; }
+        }
+
+        private Bitmap _image;
 
         #endregion
 
         #region Constructors
 
-        private Screenshot(MouseEventArgs mouseDown, MouseEventArgs mouseUp, bool doubleClick)
+        private Screenshot(ScreenshotArgs args)
         {
             _image = CaptureScreen();
-            _timeCaptured = DateTime.Now;
+            TimeCaptured = DateTime.Now;
 
-            _mouseDown = mouseDown;
-            _mouseUp = mouseUp;
-
-            if (doubleClick)
+            if (args.DoubleClick)
             {
-                MousePlotter.DrawMouseDoubleClickIcon(ref _image, mouseUp);
+                MousePlotter.DrawMouseDoubleClickIcon(ref _image, args.MouseUp);
             }
             else
             {
-                MousePlotter.DrawMouseClickIcon(ref _image, mouseDown, mouseUp);
+                MousePlotter.DrawMouseClickIcon(ref _image, args.MouseDown, args.MouseUp);
             }
         }
 
@@ -55,8 +55,8 @@
         /// </returns>
         public int CompareTo(object obj)
         {
-            var other = (Screenshot)obj;
-            return _timeCaptured.CompareTo(other._timeCaptured);
+            var other = obj as Screenshot;
+            return TimeCaptured.CompareTo(other.TimeCaptured);
         }
 
         #endregion
@@ -67,13 +67,13 @@
         /// <returns>Screenshot.</returns>
         private Bitmap CaptureScreen()
         {
-            var screenShotBMP = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height, PixelFormat.Format32bppArgb);
-            var screenShotGraphics = Graphics.FromImage(screenShotBMP);
+            var screenShotBmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height, PixelFormat.Format32bppArgb);
+            var screenShotGraphics = Graphics.FromImage(screenShotBmp);
 
             screenShotGraphics.CopyFromScreen(Screen.PrimaryScreen.Bounds.X, Screen.PrimaryScreen.Bounds.Y, 0, 0, Screen.PrimaryScreen.Bounds.Size, CopyPixelOperation.SourceCopy);
 
             screenShotGraphics.Dispose();
-            return screenShotBMP;
+            return screenShotBmp;
         }
 
         /// <summary>
@@ -81,7 +81,7 @@
         /// </summary>
         public void Dispose()
         {
-            _image.Dispose();
+            Image.Dispose();
         }
 
         /// <summary>
@@ -91,8 +91,8 @@
         /// <returns>Path to saved file.</returns>
         public string SaveToFile(int prefixNumber)
         {
-            string filename = prefixNumber + "_" + Utility.DateToFileString(_timeCaptured) + ".png";
-            _image.Save(filename, ImageFormat.Png);
+            var filename = prefixNumber + "_" + Utility.DateToFileString(TimeCaptured) + ".png";
+            Image.Save(filename, ImageFormat.Png);
             
             return filename;
         }
@@ -101,9 +101,9 @@
         /// Take a screenshot.
         /// </summary>
         /// <returns>Screenshot of current desktop.</returns>
-        public static Screenshot Capture(MouseEventArgs mouseDown, MouseEventArgs mouseUp, bool doubleClick)
+        public static Screenshot Capture(ScreenshotArgs args)
         {
-            return new Screenshot(mouseDown, mouseUp, doubleClick);
+            return new Screenshot(args);
         }
     }
 }

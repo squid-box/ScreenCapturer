@@ -83,6 +83,7 @@
     <Compile Include="Code\Logger.cs" />
     <Compile Include="Code\MousePlotter.cs" />
     <Compile Include="Code\Screenshot.cs" />
+    <Compile Include="Code\ScreenshotArgs.cs" />
     <Compile Include="Localizations\strings.se.Designer.cs">
       <DependentUpon>strings.se.resx</DependentUpon>
       <AutoGen>True</AutoGen>

@@ -44,14 +44,14 @@
                 _capturer.IsTakingShots = true;
 
                 // Take shot and check
-                _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
+                _capturer.TakeShot(new ScreenshotArgs(_mouseLeftDown1, _mouseLeftUp1, false));
                 Assert.AreEqual(1, _capturer.Shots.Count);
 
-                _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
-                _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
+                _capturer.TakeShot(new ScreenshotArgs(_mouseLeftDown1, _mouseLeftUp1, false));
+                _capturer.TakeShot(new ScreenshotArgs(_mouseLeftDown1, _mouseLeftUp1, false));
                 Assert.AreEqual(3, _capturer.Shots.Count);
 
-                _capturer.TakeShot(_mouseDragDown, _mouseDragUp, false);
+                _capturer.TakeShot(new ScreenshotArgs(_mouseDragDown, _mouseDragUp, false));
                 Assert.AreEqual(4, _capturer.Shots.Count);
             }
             catch (System.ComponentModel.Win32Exception)
@@ -74,14 +74,14 @@
                 // Fill the Shots to the "buffer limit"
                 for (var i = 0; i < _capturer.Buffersize + 1; i++)
                 {
-                    _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
+                    _capturer.TakeShot(new ScreenshotArgs(_mouseLeftDown1, _mouseLeftUp1, false));
                 }
 
                 // Assert that limit is reached.
                 Assert.AreEqual(_capturer.Buffersize, _capturer.Shots.Count);
 
                 // Assert that limit is not breached.
-                _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
+                _capturer.TakeShot(new ScreenshotArgs(_mouseLeftDown1, _mouseLeftUp1, false));
                 Assert.AreEqual(_capturer.Buffersize, _capturer.Shots.Count);
             }
             catch (System.ComponentModel.Win32Exception)
@@ -99,16 +99,16 @@
                 // No shots in capturer at start.
                 Assert.AreEqual(0, _capturer.Shots.Count);
 
-                _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
+                _capturer.TakeShot(new ScreenshotArgs(_mouseLeftDown1, _mouseLeftUp1, false));
                 Assert.AreEqual(0, _capturer.Shots.Count);
 
                 _capturer.IsTakingShots = true;
 
-                _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
+                _capturer.TakeShot(new ScreenshotArgs(_mouseLeftDown1, _mouseLeftUp1, false));
                 Assert.AreEqual(1, _capturer.Shots.Count);
 
                 _capturer.IsTakingShots = false;
-                _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
+                _capturer.TakeShot(new ScreenshotArgs(_mouseLeftDown1, _mouseLeftUp1, false));
                 Assert.AreEqual(1, _capturer.Shots.Count);
             }
             catch (System.ComponentModel.Win32Exception)
@@ -127,7 +127,7 @@
                 Assert.AreEqual(0, _capturer.Shots.Count);
 
                 _capturer.IsTakingShots = true;
-                _capturer.TakeShot(_mouseLeftDown1, _mouseLeftUp1, false);
+                _capturer.TakeShot(new ScreenshotArgs(_mouseLeftDown1, _mouseLeftUp1, false));
 
                 // Save shot to file, then remove the zip immediately.
                 _capturer.SaveShots();

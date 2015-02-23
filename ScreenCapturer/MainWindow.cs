@@ -164,7 +164,7 @@
                     return;
                 }
 
-                _capturer.TakeShot(e, _lastMouseDownEvent, DoubleClickDetected());
+                _capturer.TakeShot(new ScreenshotArgs(e, _lastMouseDownEvent, DoubleClickDetected()));
                 _lastShotTaken = Environment.TickCount;
             }
         }

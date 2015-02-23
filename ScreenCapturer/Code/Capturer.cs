@@ -48,14 +48,12 @@
         /// <summary>
         /// Takes Shots, keeping the queue correct.
         /// </summary>
-        /// <param name="mouseDown">Event data of the mouse event that triggered this shot.</param>
-        /// <param name="mouseUp">Event data of the end of this shot.</param>
-        /// <param name="doubleClick">Is this a screenshot of a double click?</param>
-        internal void TakeShot(MouseEventArgs mouseDown, MouseEventArgs mouseUp, Boolean doubleClick)
+        /// <param name="args"></param>
+        internal void TakeShot(ScreenshotArgs args)
         {
             if (IsTakingShots)
             {
-                if (doubleClick && Shots.Count > 0)
+                if (args.DoubleClick && Shots.Count > 0)
                 {
                     // If a doubleclick is detected, last shot is removed to "make room" for the double click shot.
                     Shots.RemoveAt(0);
@@ -63,7 +61,7 @@
 
                 CheckBuffer();
 
-                Shots.Add(Screenshot.Capture(mouseDown, mouseUp, doubleClick));
+                Shots.Add(Screenshot.Capture(args));
             }
         }
 
